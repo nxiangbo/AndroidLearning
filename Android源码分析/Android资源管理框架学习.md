@@ -1,6 +1,6 @@
 # Android资源管理框架学习
 
-最近在学习Android资源的编译、打包、以及创建和使用的过程。主要是参考老罗的[Android资源管理框架（Asset Manager）简要介绍和学习计划](https://blog.csdn.net/luoshengyang/article/details/8738877)系列文章和谷歌官方文档，即[提供资源](https://developer.android.com/guide/topics/resources/providing-resources)和[支持多种屏幕](https://developer.android.com/guide/practices/screens_support)
+最近在学习Android资源的编译、打包、以及创建和使用的过程。主要是参考老罗的[Android资源管理框架（Asset Manager）简要介绍和学习计划](https://blog.csdn.net/luoshengyang/article/details/8738877)系列文章和谷歌官方文档，即[提供资源](https://developer.android.com/guide/topics/resources/providing-resources)和[支持多种屏幕](https://developer.android.com/guide/practices/screens_support)等文章。
 
 
 
