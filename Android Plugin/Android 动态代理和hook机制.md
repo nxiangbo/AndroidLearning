@@ -15,7 +15,7 @@ Java中提供了Proxy和InvocationHandler两个API。Proxy可以通过调用newP
 可以使用代理进行hook。在插件化中，宿主加载插件时需要考虑插件生命周期的问题。因此，为了激活插件Activity的生命周期，hook Instrumentation。具体步骤是，首先通过反射得到ActivityThread类，同时，根据currentActivityThread方法获得ActivityThread对象。其次，通过ActivityThread对象拿到mInstrumentation的成员变量。然后，自定义一个CustomInstrumentation类（继承于Instrumentation）并将这个对象替换掉原来的Instrumentation对象。最后，调用Instrumentation的任何方法都可以通过CustomInstrumentation来进行拦截或修改。
 
 ```java
-Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
+		Class<?> activityThreadClass = Class.forName("android.app.ActivityThread");
 		Method currentActivityThreadMethod = activityThreadClass.getDeclaredMethod("currentActivityThread");
 		currentActivityThreadMethod.setAccessible(true);
 		Object currentActivityThread = currentActivityThreadMethod.invoke(null);
