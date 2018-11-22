@@ -15,15 +15,8 @@ Activity的启动分为根Activity的启动和普通Activity的启动。根Activ
 
 ```java
 public boolean startActivitySafely(View v, Intent intent, ItemInfo item) {
- 
-        // Only launch using the new animation if the shortcut has not opted out (this is a
-        // private contract between launcher and may be ignored in the future).
-        boolean useLaunchAnimation = (v != null) &&
-                !intent.hasExtra(INTENT_EXTRA_IGNORE_LAUNCH_ANIMATION);
-        Bundle optsBundle = useLaunchAnimation ? getActivityLaunchOptions(v) : null;
-
-        UserHandle user = item == null ? null : item.user;
-
+		// 省略代码
+            ...
         // Prepare intent
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (v != null) {
@@ -89,7 +82,7 @@ public void startActivityForResult(@RequiresPermission Intent intent, int reques
     }
 ```
 
-在上述函数中，会调用Instrumentation类的execStartActivity函数。**Instrumentation是用于监控应用程序与系统的交互。**而Activity的启动过程涉及Launcher组件和AMS，属于应用程序与系统之间的交互。因此，调用Instrumentation的execStartActivity函数。
+在上述函数中，会调用Instrumentation类的execStartActivity函数。**Instrumentation是用于监控应用程序与系统的交互。**而Activity的启动过程涉及Launcher组件和AMS，属于应用程序与系统之间的交互。因此，调用Instrumentation的execStartActivity函数。Activity 实例对象的创建，以及生命周期的激活都是通过此类进行的。
 
 **frameworks/base/core/java/android/app/Instrumentation.java** 
 
