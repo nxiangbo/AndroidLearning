@@ -133,6 +133,36 @@ public class MyProcessor extends AbstractProcessor {
 
 
 
+## Elements 和TypeMirrors
+
+在`init()`中我们获得如下引用：
+
+- **Elements**：一个用来处理`Element`的工具类（后面将做详细说明）；
+- **Types**：一个用来处理`TypeMirror`的工具类（后面将做详细说明）；
+- **Filer**：正如这个名字所示，使用Filer你可以创建文件。
+
+在注解处理过程中，我们扫描所有的Java源文件。源代码的每一个部分都是一个特定类型的`Element`。换句话说：`Element`代表程序的元素，例如包、类或者方法。每个`Element`代表一个静态的、语言级别的构件。在下面的例子中，我们通过注释来说明这个：
+
+
+
+```java
+package com.example;    // PackageElement
+
+public class Foo {        // TypeElement
+
+    private int a;      // VariableElement
+    private Foo other;  // VariableElement
+
+    public Foo () {}    // ExecuteableElement
+
+    public void setA (  // ExecuteableElement
+                     int newA   // VariableElement
+                     ) {}
+}
+```
+
+
+
 ## 例子
 
 下面将通过一个例子，来说明注解处理器是如何使用的。
