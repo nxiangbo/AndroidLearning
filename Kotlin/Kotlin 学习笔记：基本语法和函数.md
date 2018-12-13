@@ -4,7 +4,7 @@
 
 
 
-## ![Kotlin-函数](E:\AndroidLearning\Kotlin\images\Kotlin-函数.png)
+## ![Kotlin-函数](\images\Kotlin-函数.png)
 
 
 
@@ -12,7 +12,7 @@
 
 ### 声明函数的语法
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-functiondefine.png)
+![](\images\Kotlin-functiondefine.png)
 
 
 
@@ -126,7 +126,7 @@ public class JoinKt {
 
 接收者对象：用来调用扩展函数的对象
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-extensionfunction.png)
+![](images\Kotlin-extensionfunction.png)
 
 - 扩展函数如何调用及优点
 

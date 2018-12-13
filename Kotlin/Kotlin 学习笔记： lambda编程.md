@@ -1,13 +1,13 @@
 # Kotlin 学习笔记： lambda编程
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-lambda.png)
+![](images\Kotlin-lambda.png)
 
 ## 什么是lambda表达式
 “Lambda 表达式”(lambda expression)是一个匿名函数，Lambda表达式基于数学中的λ演算得名，直接对应于其中的lambda抽象(lambda abstraction)，是一个匿名函数，即没有函数名的函数。
 lambda表达式本质上是可以传递给其他函数的一段代码。lambda可以作为函数的参数和返回值。大大简化了代码。
 
 lambda表达式的语法为
-![](E:\AndroidLearning\Kotlin\images\Kotlin-lambda01.PNG)
+![](images\Kotlin-lambda01.PNG)
 
 
 
@@ -25,7 +25,7 @@ filter 可以移除集合中不满足条件的元素。
 
 
 
-![](E:\AndroidLearning\Kotlin\images\lambda-filter.PNG)
+![](images\lambda-filter.PNG)
 
 
 
@@ -39,7 +39,7 @@ map函数对集合中的每个元素应用给定的函数并把结果收集到�
 [1, 4, 9, 16]
 ```
 
-![](E:\AndroidLearning\Kotlin\images\lambda-map.PNG)
+![](images\lambda-map.PNG)
 
 
 
@@ -94,7 +94,7 @@ groupBy可以用于将列表转换成分组的map
 >>> println(people.groupBy { it.age })
 ```
 
-![](E:\AndroidLearning\Kotlin\images\lambda-groupby.PNG)
+![](images\lambda-groupby.PNG)
 
 - flatmap和flatten
 
@@ -106,7 +106,7 @@ flatMap函数做两件事情：首先根据作为实参给定的函数对集合�
 [a, b, c, d, e, f]
 ```
 
-![](E:\AndroidLearning\Kotlin\images\lambda-flatMap.PNG)
+![](images\lambda-flatMap.PNG)
 
 flatten可以将多个集合的元素合并到一个集合中。
 

@@ -2,7 +2,7 @@
 
 
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-class.png)
+![](images\Kotlin-class.png)
 
 
 
@@ -12,7 +12,7 @@
 
 可见性修饰符
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-class01.png)
+![](images\Kotlin-class01.png)
 
 
 
@@ -56,7 +56,7 @@ class CustomView: View {
 
 与java不同的是，默认情况下，内部类不能访问外部类。如果内部类想要访问外部类，需要使用inline关键字显示声明内部类。
 
-![](E:\AndroidLearning\Kotlin\images\kotlin-class02.png)
+![](images\kotlin-class02.png)
 
 
 
@@ -71,9 +71,7 @@ class CustomView: View {
 下面我们创建了一个User数据类，它有两个属性，姓名和年龄。
 
 ```kotlin
-data class User(val name:String, val age: Int) {
-   
-}
+data class Person(val name:String, val age: Int)
 ```
 
 在使用时，我们可以直接user1.name或user1.toString()调用。
