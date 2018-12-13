@@ -203,3 +203,46 @@ public final class ObjectDemo {
 }
 ```
 
+
+
+## companion object
+
+可以包含工厂方法或者与该类相关但不需要该类实例的方法。因为顶层函数不能访问类的私有方法，而companion object 可以访问类的私有属性和方法。
+
+```kotlin
+abstract class RepoDatabase : RoomDatabase() {
+    abstract fun repos(): RepoDao
+
+    companion object {
+
+        @Volatile
+        private var INSTANCE: RepoDatabase? = null
+
+        fun getInstance(context: Context): RepoDatabase = INSTANCE ?: synchronized(this) {
+            INSTANCE ?: buildDatabase(context).also { INSTANCE = it }
+        }
+
+        private fun buildDatabase(context: Context) =
+                Room.databaseBuilder(context, RepoDatabase::class.java, "zhihu.db").build()
+    }
+}
+```
+
+### object表达式
+
+可以替代匿名内部类
+
+```kotlin
+        val vto = layout.viewTreeObserver
+        vto.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener 		{
+            @RequiresApi(Build.VERSION_CODES.JELLY_BEAN)
+            override fun onGlobalLayout(){
+                layout.viewTreeObserver.removeOnGlobalLayoutListener(this)
+                val height = layout.measuredHeight
+                val width = layout.measuredWidth
+            }
+        })
+```
+
+
+
