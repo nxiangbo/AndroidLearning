@@ -183,8 +183,7 @@ object关键字有三种应用场景：
 object声明将 类声明和单一实例声明结合在一起。下面创建一个object
 
 ```kotlin
-object ObjectDemo{
-    
+object ObjectDemo{  
 }
 ```
 

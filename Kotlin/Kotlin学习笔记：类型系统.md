@@ -132,7 +132,7 @@ email?.let { email -> sendEmailTo(email) }
 
 ## 集合
 
-Kotlin使用的是Java的集合框架。因此，本质上每一个Kotlin集合接口都对应着一个Java集合接口的实例。
+ 。因此，本质上每一个Kotlin集合接口都对应着一个Java集合接口的实例。
 
 与Java不同的是，Kotlin的集合分为两种，一种是只读集合，一种是可变集合。
 

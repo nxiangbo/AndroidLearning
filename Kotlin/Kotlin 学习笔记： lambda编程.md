@@ -43,7 +43,7 @@ map函数对集合中的每个元素应用给定的函数并把结果收集到�
 
 
 
-- all，any，find，count，
+- all，any，find，count
 
 这些主要用于对集合的判定
 
@@ -235,7 +235,7 @@ fun alphabet(): String {
 	for (letter in 'A'..'Z') {
 		result.append(letter)
 	}
-	esult.append("\nNow I know the alphabet!")
+	result.append("\nNow I know the alphabet!")
 	return result.toString()
 } 
 >>> println(alphabet())
@@ -247,8 +247,8 @@ Now I know the alphabet!
 
 ```kotlin
 fun alphabet(): String {
-	val stringBuilder = StringBuilder()
-	return with(stringBuilder)
+	val result = StringBuilder()
+	return with(result)
 		{ for (letter in 'A'..'Z')
 			{this.append(letter)}
 			append("\nNow I know the alphabet!")
@@ -291,32 +291,8 @@ fun searchRepos(
         service: ZhihuService,
         query:String,
         onSuccess:(repos: List<Repo>) -> Unit,
-        onError: (error: String) -> Unit
-) {
-    service.searchRepos(query).enqueue(
-            object : Callback<RepoSearchResponse>{
-                override fun onFailure(call: Call<RepoSearchResponse>?, t: Throwable?) {
-                    Log.d(TAG, "fail to get data")
-                    onError(t!!.message ?: "unknown error")
-                }
-
-                override fun onResponse(call: Call<RepoSearchResponse>?, response: Response<RepoSearchResponse>?) {
-                    Log.d(TAG, "got a response $response")
-
-                    if (response != null) {
-                        if (response.isSuccessful){
-                            val repos = response.body()?.items?: emptyList()
-                            val next = response.body()?.paging?: null
-                            Log.d(TAG, next.toString())
-                            onSuccess(repos)
-                        } else {
-                            Log.d(TAG, "fail to get data")
-                            onError("unknown error")
-                        }
-                    }
-                }
-
-            })
+        onError: (error: String) -> Unit) {
+   //...
 }
 
 ```
