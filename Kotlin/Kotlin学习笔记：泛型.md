@@ -1,6 +1,6 @@
 # Kotlin学习笔记：泛型
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-fanxing.png)
+![](images\Kotlin-generics0.png)
 
 Kotlin的泛型创建和Java几乎一样。在运行时，也会进行类型擦除。
 
@@ -15,6 +15,18 @@ Kotlin的泛型创建和Java几乎一样。在运行时，也会进行类型擦�
 ## 类型参数约束
 
 T : Number等价于T extends Number 
+
+## 泛型的定义
+
+## ![屏幕快照 2018-12-16 下午3.27.35](/Users/nxiangbo/Documents/AndroidLearning/Kotlin/images/Kotlin-generics.png)
+
+
+
+## 类型参数的约束
+
+T : Number等价于T extends Number 
+
+![kotlin-generics02](/Users/nxiangbo/Documents/AndroidLearning/Kotlin/images/kotlin-generics02.png)
 
 ## reified类型参数
 
@@ -60,6 +72,8 @@ inline fun <reified T: Activity> Context.startActivity(){
     startActivity(intent)
 }
 ```
+
+
 
 
 
