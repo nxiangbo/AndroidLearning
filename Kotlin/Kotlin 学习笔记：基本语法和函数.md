@@ -4,7 +4,7 @@
 
 
 
-## ![Kotlin-函数](\images\Kotlin-函数.png)
+## ![Kotlin-函数](images\Kotlin-函数.png)
 
 
 
@@ -12,7 +12,7 @@
 
 ### 声明函数的语法
 
-![](\images\Kotlin-functiondefine.png)
+![](images\Kotlin-functiondefine.png)
 
 
 
