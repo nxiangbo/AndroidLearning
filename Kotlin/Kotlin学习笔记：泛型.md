@@ -18,7 +18,7 @@ T : Number等价于T extends Number
 
 ## 泛型的定义
 
-## ![屏幕快照 2018-12-16 下午3.27.35](/Users/nxiangbo/Documents/AndroidLearning/Kotlin/images/Kotlin-generics.png)
+## ![屏幕快照 2018-12-16 下午3.27.35](images/Kotlin-generics.png)
 
 
 
@@ -26,7 +26,7 @@ T : Number等价于T extends Number
 
 T : Number等价于T extends Number 
 
-![kotlin-generics02](/Users/nxiangbo/Documents/AndroidLearning/Kotlin/images/kotlin-generics02.png)
+![kotlin-generics02](images/kotlin-generics02.png)
 
 ## reified类型参数
 
