@@ -1,6 +1,6 @@
 # Kotlin学习笔记：注解和反射
 
-![](E:\AndroidLearning\Kotlin\images\kotlin-annotation and reflect.png)
+![](images\kotlin-annotation and reflect.png)
 
 
 
