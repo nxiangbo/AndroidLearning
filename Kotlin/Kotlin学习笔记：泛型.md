@@ -32,6 +32,16 @@ T : Number等价于T extends Number
 
 Kotlin在运行时，也会进行类型擦除。但是如果想要在运行时获取正确的类型参数类型，可以使用refied关键字。reified只能用于inline函数。
 
+```kotlin
+inline fun <reified T> isA(value: Any) = value is T
+>>> println(isA<String>("abc"))
+true
+>>> println(isA<String>(123))
+false
+```
+
+
+
 Collection的filterIsInstance方法就是使用refied，可以从集合中选择指定类型的实例。
 
 ```kotlin

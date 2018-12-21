@@ -63,6 +63,22 @@ public fun CoroutineScope.launch(
 ): Job {...}
 ```
 
+使用launch创建协程
+
+```kotlin
+import kotlinx.coroutines.*
+fun main() {
+    GlobalScope.launch { // 在后台启动一个新的协程并继续
+        delay(1000L)
+        println("World!")
+    }
+    println("Hello,") // 主线程中的代码会立即执行
+    runBlocking {     // 但是这个函数阻塞了主线程
+        delay(2000L)  // ……我们延迟2秒来保证 JVM 的存活
+    } 
+}
+```
+
 
 
  - async方法
@@ -92,6 +108,33 @@ public interface Deferred<out T> : Job {
 ```
 
 launch 一般用于执行协程任务。async用于执行协程任务并得到执行结果。
+
+async 例子
+
+```kotlin
+import kotlinx.coroutines.*
+import kotlin.system.*
+fun main() = runBlocking<Unit> {
+    val time = measureTimeMillis {
+        val one = async { doSomethingUsefulOne() }
+        val two = async { doSomethingUsefulTwo() }
+        println("The answer is ${one.await() + two.await()}")
+    }
+    println("Completed in $time ms")    
+}
+
+suspend fun doSomethingUsefulOne(): Int {
+    delay(1000L) // 假设我们在这里做了些有用的事
+    return 13
+}
+
+suspend fun doSomethingUsefulTwo(): Int {
+    delay(1000L) // 假设我们在这里也做了些有用的事
+    return 29
+}
+```
+
+
 
 ### runBlocking
 协程构建器。创建新的协程，并阻塞当前线程，直到协程执行完毕
@@ -180,5 +223,70 @@ public fun cancel(): Unit
 
 ```kotlin
  public suspend fun join()
+```
+
+
+
+
+
+```kotlin
+import kotlinx.coroutines.*
+
+fun main() = runBlocking {
+    val startTime = System.currentTimeMillis()
+    val job = launch(Dispatchers.Default) {
+        var nextPrintTime = startTime
+        var i = 0
+        while (i < 5) { // 一个执行计算的循环，只是为了占用CPU
+            // 每秒打印消息两次
+            if (System.currentTimeMillis() >= nextPrintTime) {
+                println("I'm sleeping ${i++} ...")
+                nextPrintTime += 500L
+            }
+        }
+    }
+    delay(1300L) // 等待一段时间
+    println("main: I'm tired of waiting!")
+    job.cancelAndJoin() // 取消一个任务并且等待它结束
+    println("main: Now I can quit.")
+}
+```
+
+
+
+```kotlin
+fun test() = runBlocking{
+    //每秒输出两个数字
+    val job1 = launch(Dispatchers.IO, CoroutineStart.LAZY) {
+        var count = 0
+        while (true) {
+            count++
+            //delay()表示将这个协程挂起500ms
+            delay(500)
+            println("count::$count")
+        }
+    }
+
+    //job2会立刻启动
+    val job2 = async(Dispatchers.IO) {
+        job1.start()
+        "JOB2"
+    }
+
+    launch(Dispatchers.Main) {
+        delay(3000)
+        job1.cancel()
+        //await()的规则是：如果此刻job2已经执行完则立刻返回结果，否则等待job2执行
+        println(job2.await())
+    }
+
+}
+count::1
+count::2
+count::3
+count::4
+count::5
+count::6
+JOB2
 ```
 

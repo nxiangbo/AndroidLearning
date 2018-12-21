@@ -243,3 +243,14 @@ abstract class RepoDatabase : RoomDatabase() {
 
 
 
+## 接口
+
+
+
+```kotlin
+interface Clickable {
+    fun click() // 正常方法
+    fun showOff() = println("I'm clickable!") // 方法的默认实现
+}
+```
+

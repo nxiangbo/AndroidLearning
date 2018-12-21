@@ -8,6 +8,32 @@
 
 
 
+```kotlin
+fun getMnemonic(color: Color) =
+    when (color) {
+        Color.RED -> "Richard"
+        Color.ORANGE -> "Of"
+        Color.YELLOW -> "York"
+        Color.GREEN -> "Gave"
+        Color.BLUE -> "Battle"
+        Color.INDIGO -> "In"
+        Color.VIOLET -> "Vain"
+	}
+>>> println(getMnemonic(Color.BLUE))
+Battle
+```
+
+
+
+```kotlin
+fun main(args: Array<String>) {
+	val name = if (args.size > 0) args[0] else "Kotlin"
+	println("Hello, $name!")
+}
+```
+
+
+
 ## 函数
 
 ### 声明函数的语法
@@ -163,6 +189,10 @@ public class FunctionTest {
 - 扩展函数能做什么
 
 在Kotlin标准库中，大量使用扩展函数。例如，String等
+
+
+
+
 
 ### 函数与集合
 
