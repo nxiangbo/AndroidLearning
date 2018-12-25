@@ -1,12 +1,15 @@
 # Kotlin 学习笔记：基本语法和函数
 
+- 变量
+
+```kotlin
+val str = "hello" // val修饰的变量是不可变的，相当于java的final变量
+var count = 12  // var修饰的变量 是可变的
+```
 
 
 
-
-## ![Kotlin-函数](images\Kotlin-函数.png)
-
-
+- when表达式代替switch语句
 
 ```kotlin
 fun getMnemonic(color: Color) =
@@ -23,7 +26,7 @@ fun getMnemonic(color: Color) =
 Battle
 ```
 
-
+- if() else是表达式。说明if() else 可以作为赋值给变量，也可以作为返回值。
 
 ```kotlin
 fun main(args: Array<String>) {
@@ -31,6 +34,10 @@ fun main(args: Array<String>) {
 	println("Hello, $name!")
 }
 ```
+
+
+
+## ![Kotlin-函数](images\Kotlin-函数.png)
 
 
 

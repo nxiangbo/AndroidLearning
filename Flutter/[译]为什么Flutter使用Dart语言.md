@@ -6,7 +6,7 @@
 
 Dart是开发人员喜欢Flutter的一个重要原因。正如一条tweet所说：
 
-以列举了Dart的一些特征，这对Flutter是不可或缺的：
+下面列举了Dart的一些特征，这对Flutter是不可或缺的：
 
 - Dart 使用AOT（Ahead Of Time）编译成快速，可预测的本地代码。它允许几乎所有的Flutter都用Dart编写。这不仅使得Flutter允许速度更快，而且所有东西（包括所有的部件）都可以定制。
 - Dart也可以使用JIT（Just in time）编译，用于极快的开发周期和改变游戏规则的工作流程（包括Flutter流行的秒级状态热重载）。
@@ -68,7 +68,7 @@ Dart可以有效地编译AOT或JIT，解释或转换成其他语言。 Dart编�
 >
 > 这个功能让人着迷。我认为Visual Studio中的编辑和继续（Edit & Continue）功能很好用，但热加载简直令人震惊。 只是这一个功能，我认为移动开发人员的工作效率可以提高两倍。
 >
-> 这对我来说真的是一个改变游戏规则的人。 当我部署代码并且需要很长时间时，我会失去焦点，我会做其他事情，当我回到模拟器/设备时，我已经忘记了我想要测试的内容。 比用5p分钟移动控制2px更令人沮丧的是什么？ 随着颤动，这已不复存在。
+> 这对我来说真的是一个改变游戏规则的人。 当我部署代码并且需要很长时间时，我会失去焦点，我会做其他事情，当我回到模拟器/设备时，我已经忘记了我想要测试的内容。 没有什么比用5分钟去控制2px更令人沮丧的了。 随着Flutter出现，这一切都不会存在。
 
 Flutter的热加载让人更容易尝试新的idea或者替换方案，这大大提高了创造力。
 
@@ -90,8 +90,104 @@ Flutter的热加载让人更容易尝试新的idea或者替换方案，这大大
 
 ### AOT编译和“桥”
 
-我们已经讨论了Dart具有保持APP流畅的功能，那就是Dart可以被AOT编译成本地代码。预先编译的AOT代码比JIT编译的代码更可以预测，因为在运行时，不会暂停执行JIT分析和编译。
+我们已经讨论了Dart具有保持APP流畅的特点，那就是Dart可以被AOT编译成本地代码。预先编译的AOT代码比JIT编译的代码更可以预测，因为在运行时，不会停下来执行JIT分析和编译。
 
-然而，AOT编译的代码具有更大的优势，即避免了“JavaScript 桥”
+然而，AOT编译的代码具有更大的优势，即避免了“JavaScript 桥”。当动态类型语言（如JavaScript）需要与本地代码在平台上互操作时，他们不得不通过“桥”进行通信。这导致上下文切换时必须保存大量的状态变量（可能需要二次存储）。这些上下文不仅会降低程序运行速度，而且还会造成卡顿。
 
-18 10 15 17 34 CF 42 72 72 88
+![](E:\AndroidLearning\Flutter\images\bridge.png)
+
+注意：即便编译后的代码需要一个接口与平台代码进行交互，且这也可以称之为“桥”，它也比动态类型语言所需要的“桥”的运行速度快的多。此外，由于Dart允许将小部件等内容移动到应用程序中，因此减少了“桥”的需求。
+
+### 抢占式调度，时间片和共享资源
+
+大部分支持多个并发执行线程（包括Java，Kotlin，Objective-C和Swift）的计算机语言都使用[抢占式](https://en.wikipedia.org/wiki/Preemption_%28computing%29)调度线程。每个线程在执行时，会为线程分配一个时间片，如果这个线程在分配的时间片内没有执行完，则这个线程会被其他线程抢占。但是，如果在更新线程（如内存）之间共享的资源时发生抢占，则会导致[竞争条件](https://en.wikipedia.org/wiki/Race_condition)。
+
+因为竞争条件会引起非常严重的bug，包括app crash，数据丢失，所以这是非常糟糕的。同时，由于他们依赖于[独立线程之间的相对时间](https://en.wikipedia.org/wiki/Race_condition#Software)，因此这些bug很难发现和修改。当您在调试器中运行应用程序时，竞争条件停止显示自己是很常见的。
+
+处理竞争条件的典型方法是使用锁机制组织其他线程访问共享资源，但是锁本身可能会引起卡顿或者[更严重的问题](https://en.wikipedia.org/wiki/Dining_philosophers_problem)（包括[死锁](https://en.wikipedia.org/wiki/Deadlock)和[饥饿](https://en.wikipedia.org/wiki/Starvation_%28computer_science%29)）。
+
+Dart对这个问题采取了不同的方法。在Dart中，线程是隔离的，不共享资源。因此，也避免了使用锁机制。线程通过通道进行通信。类似于[Erlang](https://www.erlang.org/)的*actors*和JavaScript的*web workers*
+
+与JavaScript一样，Dart是单线程的，这意味着它根本不允许抢占。相反，线程明确地产生（使用[async / await](https://www.dartlang.org/tutorials/language/futures)，[Futures](https://www.dartlang.org/tutorials/language/futures)或[Streams](https://www.dartlang.org/tutorials/language/streams)）。这使开发人员可以更好地控制执行。单线程帮助开发人员确保关键功能（包括动画和转换）执行完成，而不会被抢占。这不仅对于UI而且对于其他客户端 - 服务器代码而言是一个很大的优势。
+
+当然，如果开发人员忘记控制权，这可能会延迟执行其他代码。然而，我们发现这个问题比使用锁机制（因为竞争条件很难定位）更容易定位并修复
+
+
+
+### 分配和垃圾收集
+
+另一个引起卡顿的是垃圾收集。在使用锁机制时，访问共享资源确实是一个特殊的例子。但是锁可能会在收集可用内存时阻止整个应用程序运行。但是，Dart几乎可以在没有锁的情况下执行垃圾收集。
+
+Dart使用[分代垃圾收集机制](https://en.wikipedia.org/wiki/Tracing_garbage_collection#Generational_GC_.28ephemeral_GC.29)，这对于分配许多短期对象来说特别快（非常适合像Flutter这样为每一帧重建不可变视图树的响应式用户界面）。Dart可以使用单个指针凹凸分配对象（无需锁定），这可以使滑动和动画更流畅，不会卡顿。
+
+
+
+## 统一布局
+
+Dart的另一个有点是，Flutter不会在您的程序和其他模板或布局语言（如JSX或XML）之间拆分布局，也不需要单独的可视化布局工具。这里是一个简单的Flutter View，使用Dart语言写的。
+
+```dart
+new Center(child:
+  new Column(children: [
+    new Text('Hello, World!'),
+    new Icon(Icons.star, color: Colors.green),
+  ])
+)
+```
+
+![A view in Dart and what it produces](E:\AndroidLearning\Flutter\images\star.png)
+
+请注意，可视化此代码生成的输出是多么容易（即使您没有使用Dart的经验）。
+
+注意，Flutter现在使用Dart 2，布局会变得更加简单清楚，因为new关键字可以忽略。所以静态布局看起来更像是用声明性布局语言编写的，如下所示。
+
+```dart
+Center(child:
+  Column(children: [
+    Text('Hello, World!'),
+    Icon(Icons.star, color: Colors.green),
+  ])
+)
+```
+
+然而，我知道你可能在思考--为何将缺少特定的布局语言称为优点？但它实际上是一个改变游戏规则的人。这里是一名开发者写的文章，标题是“[Why native app developers should take a serious look at Flutter](https://hackernoon.com/why-native-app-developers-should-take-a-serious-look-at-flutter-e97361a1c073)”。
+
+>在Flutter中，布局只使用Dart代码。没有XML和其他模板语言。也没有视觉设计工具/storyboarding 工具。
+>
+>我的预感是，听到这个，你们中的许多人甚至可能会有点畏缩。首先，这也是我的反应。使用可视化工具进行布局并不会更容易。 不在代码中编写各种约束逻辑会使事情变得过于复杂吗？
+>
+>结果证明我的答案是否定的。还有男孩！这是多么令人大开眼界。
+
+答案的第一部分是上面提到的热重载。
+
+> 我不能强调这是如何比Android的Instant Run或任何类似的解决方案提前几年。它只是工作，即使是在大型的应用程序上，也非常非常快。这就是Dart对你的影响力。
+>
+> 实际上，可视化编辑器是多余的。我也使用过XCode提供的不错的auto layout。
+
+Dart创建了简洁容易理解的布局，同时，非常快的热加载可以让你更快看到执行结果。这包括布局的非静态部分。
+
+> 结果，我在Flutter（Dart）中编写布局比使用Android / XCode更有效率。一旦掌握了它（对我而言是几个星期），由于很少进行上下文的切换，可以节省很多开销。开发者不需要切换到设计界面，然后选择鼠标并开始点击。然后思考是否必须以编程方式完成某些事情，如何实现这一点等。一切都是可编程的。并且Flutter的API设计的非常好。它是非常直观的，并且比auto layout 和XML布局更强大。
+
+例如，这里有为一个list添加分割线，可以写成如下方式：
+
+```dart
+return new ListView.builder(itemBuilder: (context, i) {
+  if (i.isOdd) return new Divider(); 
+  // rest of function
+});
+```
+
+在Flutter中，不管是静态布局还是动态布局，他们都在一个地方。新Dart工具（包括Flutter Inspector 和大纲视图（ the outline view））使复杂，漂亮的布局更加容易。
+
+
+
+## Dart是专有语言吗
+
+不，Dart（和Flutter一样）是完全开源的语言，有干净的许可证，也遵循[ECMA标准](https://www.ecma-international.org/publications/standards/Ecma-408.htm)。Dart在谷歌内外非常受欢迎。在Google内部，它是增长最快的语言之一，被Adwords，Flutter，Fuchsia和其他人使用。在外部，Dart相关项目有100多个人贡献代码。
+
+Dart开放性的一个更好的指标是Google以外的社区的增长。例如，我们看到源源不断的来自第三方的关于Dart（包括Flutter和AngularDart）的文章和视，我在本文中引用了其中一些。
+
+除了Dart本身的外部提交者之外，公共Dart包存储库中有超过3000个package，包括用于Firebase，Redux，RxDart，国际化，加密，数据库，路由，集合等的库。
+
+## Dart 程序员很难找到吗
+

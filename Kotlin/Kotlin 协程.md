@@ -55,6 +55,10 @@
 
 > Launches new coroutine without blocking current thread and returns a reference to the coroutine as a [Job](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/index.html). The coroutine is cancelled when the resulting job is [cancelled](https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-job/cancel.html).
 
+创建一个新的协程，返回类型为Job。当返回的Job被cancel时，协程也会被cancel掉。
+
+方法定义如下
+
 ```kotlin
 public fun CoroutineScope.launch(
     context: CoroutineContext = EmptyCoroutineContext,
@@ -63,7 +67,15 @@ public fun CoroutineScope.launch(
 ): Job {...}
 ```
 
-使用launch创建协程
+该方法有3个参数：
+
+- `context: CoroutineContext`：表示一个协程的上下文。在Android开发中，可以使用Dispatchers.Main来指定该协程运行在UI线程。下面会详细说明协程上下文和调度器
+- `start: CoroutineStart`：定义何时启动协程。默认值是`CoroutineStart.DEFAULT`，表示立即启动协程
+- `block: suspend CoroutineScope.() -> T`： 真正的协程并不是launch和async方法，而是`block: suspend CoroutineScope.() -> T`lambda表达式参数。
+
+
+
+使用launch创建协程的例子
 
 ```kotlin
 import kotlinx.coroutines.*
@@ -93,11 +105,7 @@ public fun <T> CoroutineScope.async(
 ): Deferred<T>{...}
 ```
 
-launch 和async 方法参数是一样的：
-
-- `context: CoroutineContext`：表示一个协程的上下文。在Android开发中，可以使用Dispatchers.Main来指定该协程运行在UI线程。下面会详细说明协程上下文和调度器
-- `start: CoroutineStart`：定义何时启动协程。默认值是`CoroutineStart.DEFAULT`，表示立即启动协程
-- `block: suspend CoroutineScope.() -> T`： 真正的协程并不是launch和async方法，而是`block: suspend CoroutineScope.() -> T`lambda表达式参数。
+launch 和async 方法参数是一样的
 
 但是其返回类型不同。launch返回一个Job对象，而async返回一个Deferred对象。Deferred继承了Job接口。Deferred比Job多了一个await方法。
 
