@@ -166,7 +166,7 @@ public final class User {
 
 除了常用的toString等方法外，还自动生成了一个copy方法。那么，这个copy方法的作用是什么呢？为了让使用不可变对象的数据类变得更容易，Kotlin提供了一个copy方法，以便于通过创建副本的方式修改数据类
 
-## 委托类
+## 
 
 
 
@@ -245,7 +245,7 @@ abstract class RepoDatabase : RoomDatabase() {
 
 ## 接口
 
-
+接口与Java接口声明一致，不过Kotlin接口方法可以有默认实现。
 
 ```kotlin
 interface Clickable {

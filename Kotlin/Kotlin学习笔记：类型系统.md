@@ -1,6 +1,6 @@
 # Kotlin学习笔记：类型系统
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-type.png)
+![](images\Kotlin-type.png)
 
 
 
@@ -63,17 +63,17 @@ if (str != null) str.toUpperCase() else null
 
 elvis 接收两个运算数，如果第一个运算数不为null，则返回第一个运算数；如果为null，则返回第二个运算数。
 
-![](E:\AndroidLearning\Kotlin\images\type-elvis.PNG)
+![](images\type-elvis.PNG)
 
 
 
 - 安全转换(as?)
 
-![](E:\AndroidLearning\Kotlin\images\type-as.PNG)
+![](images\type-as.PNG)
 
 - 非null断言（!!）
 
-![](E:\AndroidLearning\Kotlin\images\type-gantanhao.PNG)
+![](images\type-gantanhao.PNG)
 
 
 
@@ -109,7 +109,7 @@ if (email != null) sendEmailTo(email)
 email?.let { email -> sendEmailTo(email) }
 ```
 
-![](E:\AndroidLearning\Kotlin\images\type.PNG)
+![](images\type.PNG)
 
 
 
@@ -136,11 +136,11 @@ email?.let { email -> sendEmailTo(email) }
 
 与Java不同的是，Kotlin的集合分为两种，一种是只读集合，一种是可变集合。
 
-![](E:\AndroidLearning\Kotlin\images\type-collection.PNG)
+![](images\type-collection.PNG)
 
 集合创建函数列表
 
-![](E:\AndroidLearning\Kotlin\images\type-collection2.PNG)
+![](images\type-collection2.PNG)
 
 
 

@@ -69,8 +69,6 @@ fun main(args: Array<String>) {
 
 - 支持默认参数值
 
-
-
 假如需要写一个在list列表中将元素用分隔符分割并打印以String类型打印的功能。
 
 一般情况下，可以这样写。
@@ -198,14 +196,6 @@ public class FunctionTest {
 在Kotlin标准库中，大量使用扩展函数。例如，String等
 
 
-
-
-
-### 函数与集合
-
-
-
-### 字符串和正则表达式
 
 
 

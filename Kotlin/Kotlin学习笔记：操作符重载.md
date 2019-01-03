@@ -1,6 +1,6 @@
 # Kotlin学习笔记：操作符重载
 
-![](E:\AndroidLearning\Kotlin\images\Kotlin-operator.png)
+![](images\Kotlin-operator.png)
 
 我们都知道Java是不支持操作符重载的。
 
@@ -45,7 +45,7 @@ Point(x=40, y=60)
 
 - 一元算术运算符
 
-![](E:\AndroidLearning\Kotlin\images\operator02.PNG)
+![](images\operator02.PNG)
 
 
 
