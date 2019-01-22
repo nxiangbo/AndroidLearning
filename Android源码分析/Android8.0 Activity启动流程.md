@@ -7,7 +7,7 @@ Activity的启动分为根Activity的启动和普通Activity的启动。根Activ
 
 在Activity的启动过程中，主要涉及3个进程的交互，即Launcher组件，ActivityManagerService，和应用程序进程（MainActivity所在进程）。MainActivity组件是由Launcher组件启动的，而Launcher组件又是通过ActivityManagerService来启动MainActivity。他们之间主要是通过binder进行进程间通信。
 
-![Activity启动过程-01](/images/Activity启动过程-01.png)
+![Activity启动过程-01](images/Activity启动过程-01.png)
 
 当我们启动应用程序时，Launcher组件会调用它的startActivitySafely函数。
 

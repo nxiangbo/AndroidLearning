@@ -294,7 +294,17 @@ Android中的填充模式有四种，是封装在Path中的一个枚举。
 
 ## 布尔操作
 
+
+
 **布尔操作是两个Path之间的运算，主要作用是用一些简单的图形通过一些规则合成一些相对比较复杂，或难以直接得到的图形**。
+
+```java
+public boolean op(Path path, Op op) {
+        return op(this, path, op);
+}
+```
+
+
 
 Path布尔运算逻辑如下
 
