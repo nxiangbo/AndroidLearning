@@ -1,0 +1,28 @@
+@startuml
+
+
+activate ActivityManagerService
+ActivityManagerService -> ActiveServices : startServiceLocked
+
+deactivate ActivityManagerService
+activate ActiveServices
+ActiveServices -> ActiveServices : startServiceInnerLocked
+ActiveServices -> ActiveServices : bringUpServiceLocked
+ActiveServices -> ActiveServices : realStartServiceLocked
+ActiveServices -> ApplicationThread : scheduleCreateService
+
+deactivate ActiveServices
+activate ApplicationThread
+ApplicationThread -> ActivityThread : sendMessage
+
+deactivate ApplicationThread
+activate ActivityThread
+ActivityThread -> H : handleMessage
+
+activate H
+H -> ActivityThread : handleCreateService
+deactivate H
+
+ActivityThread -> Service : onCreate
+deactivate ActivityThread
+@enduml

@@ -1,0 +1,30 @@
+@startuml
+
+
+activate ActivityManagerService
+ActivityManagerService -> ActiveServices : bindServiceLocked
+
+deactivate ActivityManagerService
+activate ActiveServices
+ActiveServices -> ActiveServices : requestServiceBindingLocked
+ActiveServices -> ApplicationThread : scheduleBindService
+
+deactivate ActiveServices
+activate ApplicationThread
+ApplicationThread -> ActivityThread : sendMessage
+
+deactivate ApplicationThread
+activate ActivityThread
+ActivityThread -> H : handleMessage
+
+activate H
+H -> ActivityThread : handleBindService
+deactivate H
+
+activate Service
+ActivityThread -> Service : onBind
+deactivate ActivityThread
+deactivate Service
+
+ActivityThread -> ActivityManagerService : publishService
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+activate Activity
+Activity -> ContextWrapper : bindService
+
+deactivate Activity
+activate ContextWrapper
+ContextWrapper -> ContextImpl : bindService
+
+deactivate ContextWrapper
+activate ContextImpl
+ContextImpl -> ContextImpl : bindServiceCommon
+
+ContextImpl -> ActivityManagerService : bindService
+@enduml
