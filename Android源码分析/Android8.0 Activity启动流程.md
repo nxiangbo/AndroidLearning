@@ -466,7 +466,7 @@ Controller for interpreting how and then launching activities.This class collect
 
 
 
-![Activity 启动过程-02](E:\笔记\Activity 启动过程-02.png)
+![Activity 启动过程-02](\Activity 启动过程-02.png)
 
 
 

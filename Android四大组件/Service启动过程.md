@@ -2,7 +2,7 @@
 
 
 
-![](E:\AndroidLearning\Android四大组件\images\service启动过程.png)
+![](images\service启动过程.png)
 
 要启动Service，我们会调用startService方法，它的实现在ContextWrapper中，代码如下所示。
 **frameworks/base/core/java/android/content/ContextWrapper.java**
@@ -57,7 +57,7 @@ mBase是Context类型的，它的具体实现类是ContextImp。
 
 主要是执行ActivityManager.getService().startService方法，这个方法最终会调用ActivityManagerService的startService方法。
 
-![](E:\AndroidLearning\Android四大组件\images\startService02.png)
+![](images\startService02.png)
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 

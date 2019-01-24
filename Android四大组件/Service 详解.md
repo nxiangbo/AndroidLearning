@@ -2,7 +2,7 @@
 
 ## Service生命周期
 
-![img](E:\AndroidLearning\Android四大组件\images\service_lifecycle.png)
+![img](images\service_lifecycle.png)
 
 
 

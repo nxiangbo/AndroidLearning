@@ -2,7 +2,7 @@
 
 
 
-![](E:\AndroidLearning\Android四大组件\images\bindService01.png)
+![](images\bindService01.png)
 
 **frameworks/base/core/java/android/content/ContextWrapper.java**
 
@@ -73,7 +73,7 @@
 
 
 
-![](E:\AndroidLearning\Android四大组件\images\bindService02.png)
+![](images\bindService02.png)
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 
@@ -498,7 +498,7 @@ private void handleBindService(BindServiceData data) {
 
 
 
-![](E:\AndroidLearning\Android四大组件\images\bindService03.png)
+![](images\bindService03.png)
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 
