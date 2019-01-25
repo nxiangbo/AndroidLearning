@@ -2,7 +2,7 @@
 
 ## Activity 生命周期
 
-![808004-20160104111412137-1733773288.gif](/Users/nxiangbo/Documents/AndroidLearning/Android四大组件/images/Activity-lifecycle.png)
+![808004-20160104111412137-1733773288.gif](images/Activity-lifecycle.png)
 
 
 
@@ -13,9 +13,9 @@
 
 ## Fragment 生命周期
 
-![808004-20160104111456621-1865584274](/Users/nxiangbo/Documents/AndroidLearning/Android四大组件/images/fragment-lifecycle.png)
+![808004-20160104111456621-1865584274](images/fragment-lifecycle.png)
 
-![808004-20160104111511106-1584734283](/Users/nxiangbo/Documents/AndroidLearning/Android四大组件/images/Activity-fragment.png)
+![808004-20160104111511106-1584734283](images/Activity-fragment.png)
 
 - 切换到该Fragment onAttach() onCreate() onCreateView() onActivityCreated() onStart() onResume()
 - 屏幕灭掉 onPause() onSaveInstanceState() onStop()
