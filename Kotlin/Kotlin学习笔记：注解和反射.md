@@ -55,7 +55,7 @@ class Example(@field:Ann val foo,    // 标注 Java 字段
 
 ### Kotlin 反射API
 
-![](E:\AndroidLearning\Kotlin\images\kotlin-reflect01.PNG)
+![](images\kotlin-reflect01.PNG)
 
 - 类引用（KClass）
 
