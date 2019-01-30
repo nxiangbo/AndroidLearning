@@ -1,0 +1,29 @@
+@startuml
+
+
+activate ActivityManagerService
+ActivityManagerService -> ActivityManagerService : attachApplicationLocked
+
+ActivityManagerService -> ApplicationThread : bindApplication
+deactivate ActivityManagerService
+activate ApplicationThread
+ApplicationThread -> ActivityThread : sendMessage
+deactivate ApplicationThread
+
+activate ActivityThread
+ActivityThread -> H : handleMessage
+
+activate H
+H -> ActivityThread : handleBindApplication
+deactivate H
+
+ActivityThread -> ActivityThread : installContentProviders
+
+ActivityThread -> ActivityThread : installProvider
+
+
+ActivityThread -> ContentProvider : attachInfo
+deactivate ActivityThread
+activate ContentProvider
+ContentProvider -> ContentProvider : onCreate
+@enduml

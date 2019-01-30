@@ -26,6 +26,8 @@
 
 
 
+![](E:\AndroidLearning\Android四大组件\images\contentProvider.png)
+
 **frameworks/base/core/java/android/content/ContentResolver.java**
 
 ```java
@@ -478,12 +480,14 @@ public final @Nullable Cursor query(final @RequiresPermission.Read @NonNull Uri 
                                 checkTime(startTime, "getContentProviderImpl: scheduling install");
                                 proc.pubProviders.put(cpi.name, cpr);
                                 try {
+                                    // 如果应用进程已启动
                                     proc.thread.scheduleInstallProvider(cpi);
                                 } catch (RemoteException e) {
                                 }
                             }
                         } else {
                             checkTime(startTime, "getContentProviderImpl: before start process");
+                            // 如果应用进程没有启动，启动应用进程
                             proc = startProcessLocked(cpi.processName,
                                     cpr.appInfo, false, 0, "content provider",
                                     new ComponentName(cpi.applicationInfo.packageName,
@@ -560,45 +564,479 @@ public final @Nullable Cursor query(final @RequiresPermission.Read @NonNull Uri 
 
 
 
+getContentProviderImpl方法的代码很多，这里截取了关键的部分。注释1处通过getProcessRecordLocked方法来获取目标ContentProvider的应用程序进程信息，这些信息用ProcessRecord类型的proc来表示，如果该应用进程已经启动就会调用注释2处的代码，否则就会调用注释3的startProcessLocked方法来启动进程。这里我们假设ContentProvider的应用进程还没有启动，关于应用进程启动过程，我在[Android应用程序进程启动过程（前篇）](http://liuwangshu.cn/framework/applicationprocess/1.html)已经讲过，最终会调用ActivityThread的main方法，代码如下所示。
+
+
+
 ```java
-final ProcessRecord getProcessRecordLocked(String processName, int uid, boolean keepIfLarge) {
-        if (uid == SYSTEM_UID) {
-            // The system gets to run in any process.  If there are multiple
-            // processes with the same uid, just pick the first (this
-            // should never happen).
-            SparseArray<ProcessRecord> procs = mProcessNames.getMap().get(processName);
-            if (procs == null) return null;
-            final int procCount = procs.size();
-            for (int i = 0; i < procCount; i++) {
-                final int procUid = procs.keyAt(i);
-                if (UserHandle.isApp(procUid) || !UserHandle.isSameUser(procUid, uid)) {
-                    // Don't use an app process or different user process for system component.
-                    continue;
+  public static void main(String[] args) {
+        Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "ActivityThreadMain");
+
+        // CloseGuard defaults to true and can be quite spammy.  We
+        // disable it here, but selectively enable it later (via
+        // StrictMode) on debug builds, but using DropBox, not logs.
+        CloseGuard.setEnabled(false);
+
+        Environment.initForCurrentUser();
+
+        // Set the reporter for event logging in libcore
+        EventLogger.setReporter(new EventLoggingReporter());
+
+        // Make sure TrustedCertificateStore looks in the right place for CA certificates
+        final File configDir = Environment.getUserConfigDirectory(UserHandle.myUserId());
+        TrustedCertificateStore.setDefaultUserDirectory(configDir);
+
+        Process.setArgV0("<pre-initialized>");
+
+        Looper.prepareMainLooper();
+
+        ActivityThread thread = new ActivityThread();
+        thread.attach(false);
+
+        if (sMainThreadHandler == null) {
+            sMainThreadHandler = thread.getHandler();
+        }
+
+        if (false) {
+            Looper.myLooper().setMessageLogging(new
+                    LogPrinter(Log.DEBUG, "ActivityThread"));
+        }
+
+        // End of event ActivityThreadMain.
+        Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
+        Looper.loop();
+
+        throw new RuntimeException("Main thread loop unexpectedly exited");
+    }
+```
+
+
+
+```java
+private void attach(boolean system) {
+        sCurrentActivityThread = this;
+        mSystemThread = system;
+        if (!system) {
+            ViewRootImpl.addFirstDrawHandler(new Runnable() {
+                @Override
+                public void run() {
+                    ensureJitEnabled();
                 }
-                return procs.valueAt(i);
+            });
+            android.ddm.DdmHandleAppName.setAppName("<pre-initialized>",
+                                                    UserHandle.myUserId());
+            RuntimeInit.setApplicationObject(mAppThread.asBinder());
+            // 最终获得AMS，
+            final IActivityManager mgr = ActivityManager.getService();
+            try {
+                // 调用AMS的attachApplication方法，并将ApplicationThread类型的mAppThread对象传进去。
+                mgr.attachApplication(mAppThread);
+            } catch (RemoteException ex) {
+                throw ex.rethrowFromSystemServer();
+            }
+            // Watch for getting close to heap limit.
+            BinderInternal.addGcWatcher(new Runnable() {
+                @Override public void run() {
+                    if (!mSomeActivitiesChanged) {
+                        return;
+                    }
+                    Runtime runtime = Runtime.getRuntime();
+                    long dalvikMax = runtime.maxMemory();
+                    long dalvikUsed = runtime.totalMemory() - runtime.freeMemory();
+                    if (dalvikUsed > ((3*dalvikMax)/4)) {
+                        if (DEBUG_MEMORY_TRIM) Slog.d(TAG, "Dalvik max=" + (dalvikMax/1024)
+                                + " total=" + (runtime.totalMemory()/1024)
+                                + " used=" + (dalvikUsed/1024));
+                        mSomeActivitiesChanged = false;
+                        try {
+                            mgr.releaseSomeActivities(mAppThread);
+                        } catch (RemoteException e) {
+                            throw e.rethrowFromSystemServer();
+                        }
+                    }
+                }
+            });
+        } else {
+            // Don't set application object here -- if the system crashes,
+            // we can't display an alert, we just want to die die die.
+            android.ddm.DdmHandleAppName.setAppName("system_process",
+                    UserHandle.myUserId());
+            try {
+                mInstrumentation = new Instrumentation();
+                ContextImpl context = ContextImpl.createAppContext(
+                        this, getSystemContext().mLoadedApk);
+                mInitialApplication = context.mLoadedApk.makeApplication(true, null);
+                mInitialApplication.onCreate();
+            } catch (Exception e) {
+                throw new RuntimeException(
+                        "Unable to instantiate Application():" + e.toString(), e);
             }
         }
-        ProcessRecord proc = mProcessNames.get(processName, uid);
-        if (false && proc != null && !keepIfLarge
-                && proc.setProcState >= ActivityManager.PROCESS_STATE_CACHED_EMPTY
-                && proc.lastCachedPss >= 4000) {
-            // Turn this condition on to cause killing to happen regularly, for testing.
-            if (proc.baseProcessTracker != null) {
-                proc.baseProcessTracker.reportCachedKill(proc.pkgList, proc.lastCachedPss);
-            }
-            proc.kill(Long.toString(proc.lastCachedPss) + "k from cached", true);
-        } else if (proc != null && !keepIfLarge
-                && mLastMemoryLevel > ProcessStats.ADJ_MEM_FACTOR_NORMAL
-                && proc.setProcState >= ActivityManager.PROCESS_STATE_CACHED_EMPTY) {
-            if (DEBUG_PSS) Slog.d(TAG_PSS, "May not keep " + proc + ": pss=" + proc.lastCachedPss);
-            if (proc.lastCachedPss >= mProcessList.getCachedRestoreThresholdKb()) {
-                if (proc.baseProcessTracker != null) {
-                    proc.baseProcessTracker.reportCachedKill(proc.pkgList, proc.lastCachedPss);
+
+        // add dropbox logging to libcore
+        DropBox.setReporter(new DropBoxReporter());
+
+        ViewRootImpl.ConfigChangedCallback configChangedCallback
+                = (Configuration globalConfig) -> {
+            synchronized (mResourcesManager) {
+                // We need to apply this change to the resources immediately, because upon returning
+                // the view hierarchy will be informed about it.
+                if (mResourcesManager.applyConfigurationToResourcesLocked(globalConfig,
+                        null /* compat */)) {
+                    updateLocaleListFromAppContext(mInitialApplication.getApplicationContext(),
+                            mResourcesManager.getConfiguration().getLocales());
+
+                    // This actually changed the resources! Tell everyone about it.
+                    if (mPendingConfiguration == null
+                            || mPendingConfiguration.isOtherSeqNewer(globalConfig)) {
+                        mPendingConfiguration = globalConfig;
+                        sendMessage(H.CONFIGURATION_CHANGED, globalConfig);
+                    }
                 }
-                proc.kill(Long.toString(proc.lastCachedPss) + "k from cached", true);
+            }
+        };
+        ViewRootImpl.addConfigCallback(configChangedCallback);
+    }
+```
+
+
+
+
+
+![](E:\AndroidLearning\Android四大组件\images\contentProvider02.png)
+
+**frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
+
+
+
+```java
+ @Override
+    public final void attachApplication(IApplicationThread thread) {
+        synchronized (this) {
+            int callingPid = Binder.getCallingPid();
+            final long origId = Binder.clearCallingIdentity();
+            attachApplicationLocked(thread, callingPid);
+            Binder.restoreCallingIdentity(origId);
+        }
+    }
+```
+
+
+
+
+
+```java
+private final boolean attachApplicationLocked(IApplicationThread thread,
+            int pid) {
+   ...
+   thread.bindApplication(processName, appInfo, providers, app.instrumentationClass,
+                    profilerInfo, app.instrumentationArguments, app.instrumentationWatcher,
+                    app.instrumentationUiAutomationConnection, testMode,
+                    mBinderTransactionTrackingEnabled, enableTrackAllocation,
+                    isRestrictedBackupMode || !normalMode, app.persistent,
+                    new Configuration(mConfiguration), app.compat,
+                    getCommonServicesLocked(app.isolated),
+                    mCoreSettingsObserver.getCoreSettingsLocked());
+...
+}
+```
+
+
+
+
+
+```java
+ public final void bindApplication(String processName, ApplicationInfo appInfo,
+                List<ProviderInfo> providers, ComponentName instrumentationName,
+                ProfilerInfo profilerInfo, Bundle instrumentationArgs,
+                IInstrumentationWatcher instrumentationWatcher,
+                IUiAutomationConnection instrumentationUiConnection, int debugMode,
+                boolean enableBinderTracking, boolean trackAllocation,
+                boolean isRestrictedBackupMode, boolean persistent, Configuration config,
+                CompatibilityInfo compatInfo, Map services, Bundle coreSettings,
+                String buildSerial) {
+
+            if (services != null) {
+                // Setup the service cache in the ServiceManager
+                ServiceManager.initServiceCache(services);
+            }
+
+            setCoreSettings(coreSettings);
+
+            AppBindData data = new AppBindData();
+            data.processName = processName;
+            data.appInfo = appInfo;
+            data.providers = providers;
+            data.instrumentationName = instrumentationName;
+            data.instrumentationArgs = instrumentationArgs;
+            data.instrumentationWatcher = instrumentationWatcher;
+            data.instrumentationUiAutomationConnection = instrumentationUiConnection;
+            data.debugMode = debugMode;
+            data.enableBinderTracking = enableBinderTracking;
+            data.trackAllocation = trackAllocation;
+            data.restrictedBackupMode = isRestrictedBackupMode;
+            data.persistent = persistent;
+            data.config = config;
+            data.compatInfo = compatInfo;
+            data.initProfilerInfo = profilerInfo;
+            data.buildSerial = buildSerial;
+            sendMessage(H.BIND_APPLICATION, data);
+        }
+```
+
+
+
+
+
+```java
+public void handleMessage(Message msg) {
+    if (DEBUG_MESSAGES) Slog.v(TAG, ">>> handling: " + codeToString(msg.what));
+            switch (msg.what) {
+            ...
+            case BIND_APPLICATION:
+                    Trace.traceBegin(Trace.TRACE_TAG_ACTIVITY_MANAGER, "bindApplication");
+                    AppBindData data = (AppBindData)msg.obj;
+                    handleBindApplication(data);
+                    Trace.traceEnd(Trace.TRACE_TAG_ACTIVITY_MANAGER);
+                    break;
+  ...
+  }
+  ... 
+}
+```
+
+
+
+**frameworks/base/core/java/android/app/ActivityThread.java**
+
+```java
+private void handleBindApplication(AppBindData data) {
+ ...
+      final ContextImpl appContext = ContextImpl.createAppContext(this, data.info);//1
+       try {
+              final ClassLoader cl = instrContext.getClassLoader();
+              mInstrumentation = (Instrumentation)
+                  cl.loadClass(data.instrumentationName.getClassName()).newInstance();//2
+          } catch (Exception e) {
+           ...
+          }
+          final ComponentName component = new ComponentName(ii.packageName, ii.name);
+          mInstrumentation.init(this, instrContext, appContext, component,
+                  data.instrumentationWatcher, data.instrumentationUiAutomationConnection);//3
+         ...
+          Application app = data.info.makeApplication(data.restrictedBackupMode, null);//4
+          mInitialApplication = app;
+          if (!data.restrictedBackupMode) {
+              if (!ArrayUtils.isEmpty(data.providers)) {
+                  installContentProviders(app, data.providers);//5
+                  mH.sendEmptyMessageDelayed(H.ENABLE_JIT, 10*1000);
+              }
+          }
+        ...
+         mInstrumentation.callApplicationOnCreate(app);//6
+        ... 
+}
+```
+
+handleBindApplication方法的代码很长，这里截取了主要的部分。注释1处创建了ContextImpl 。注释2处通过反射创建Instrumentation并在注释3处初始化Instrumentation。注释4处创建Application并且在注释6处调用Application的onCreate方法，这意味着Content Provider所在的应用程序进程已经启动完毕，在这之前，注释5处调用installContentProviders方法来启动Content Provider，代码如下所示。
+
+
+
+```java
+ private void installContentProviders(
+            Context context, List<ProviderInfo> providers) {
+        final ArrayList<ContentProviderHolder> results = new ArrayList<>();
+
+        for (ProviderInfo cpi : providers) {
+            if (DEBUG_PROVIDER) {
+                StringBuilder buf = new StringBuilder(128);
+                buf.append("Pub ");
+                buf.append(cpi.authority);
+                buf.append(": ");
+                buf.append(cpi.name);
+                Log.i(TAG, buf.toString());
+            }
+            ContentProviderHolder cph = installProvider(context, null, cpi,
+                    false /*noisy*/, true /*noReleaseNeeded*/, true /*stable*/);
+            if (cph != null) {
+                cph.noReleaseNeeded = true;
+                results.add(cph);
             }
         }
-        return proc;
+
+        try {
+            ActivityManager.getService().publishContentProviders(
+                getApplicationThread(), results);
+        } catch (RemoteException ex) {
+            throw ex.rethrowFromSystemServer();
+        }
+    }
+```
+
+
+
+```java
+private ContentProviderHolder installProvider(Context context,
+            ContentProviderHolder holder, ProviderInfo info,
+            boolean noisy, boolean noReleaseNeeded, boolean stable) {
+        ContentProvider localProvider = null;
+        IContentProvider provider;
+        if (holder == null || holder.provider == null) {
+            if (DEBUG_PROVIDER || noisy) {
+                Slog.d(TAG, "Loading provider " + info.authority + ": "
+                        + info.name);
+            }
+            Context c = null;
+            ApplicationInfo ai = info.applicationInfo;
+            if (context.getPackageName().equals(ai.packageName)) {
+                c = context;
+            } else if (mInitialApplication != null &&
+                    mInitialApplication.getPackageName().equals(ai.packageName)) {
+                c = mInitialApplication;
+            } else {
+                try {
+                    c = context.createPackageContext(ai.packageName,
+                            Context.CONTEXT_INCLUDE_CODE);
+                } catch (PackageManager.NameNotFoundException e) {
+                    // Ignore
+                }
+            }
+            if (c == null) {
+                Slog.w(TAG, "Unable to get context for package " +
+                      ai.packageName +
+                      " while loading content provider " +
+                      info.name);
+                return null;
+            }
+
+            if (info.splitName != null) {
+                try {
+                    c = c.createContextForSplit(info.splitName);
+                } catch (NameNotFoundException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            try {
+                final java.lang.ClassLoader cl = c.getClassLoader();
+                localProvider = (ContentProvider)cl.
+                    loadClass(info.name).newInstance();
+                provider = localProvider.getIContentProvider();
+                if (provider == null) {
+                    Slog.e(TAG, "Failed to instantiate class " +
+                          info.name + " from sourceDir " +
+                          info.applicationInfo.sourceDir);
+                    return null;
+                }
+                if (DEBUG_PROVIDER) Slog.v(
+                    TAG, "Instantiating local provider " + info.name);
+                // XXX Need to create the correct context for this provider.
+                localProvider.attachInfo(c, info);
+            } catch (java.lang.Exception e) {
+                if (!mInstrumentation.onException(null, e)) {
+                    throw new RuntimeException(
+                            "Unable to get provider " + info.name
+                            + ": " + e.toString(), e);
+                }
+                return null;
+            }
+        } else {
+            provider = holder.provider;
+            if (DEBUG_PROVIDER) Slog.v(TAG, "Installing external provider " + info.authority + ": "
+                    + info.name);
+        }
+
+        ContentProviderHolder retHolder;
+
+        synchronized (mProviderMap) {
+            if (DEBUG_PROVIDER) Slog.v(TAG, "Checking to add " + provider
+                    + " / " + info.name);
+            IBinder jBinder = provider.asBinder();
+            if (localProvider != null) {
+                ComponentName cname = new ComponentName(info.packageName, info.name);
+                ProviderClientRecord pr = mLocalProvidersByName.get(cname);
+                if (pr != null) {
+                    if (DEBUG_PROVIDER) {
+                        Slog.v(TAG, "installProvider: lost the race, "
+                                + "using existing local provider");
+                    }
+                    provider = pr.mProvider;
+                } else {
+                    holder = new ContentProviderHolder(info);
+                    holder.provider = provider;
+                    holder.noReleaseNeeded = true;
+                    pr = installProviderAuthoritiesLocked(provider, localProvider, holder);
+                    mLocalProviders.put(jBinder, pr);
+                    mLocalProvidersByName.put(cname, pr);
+                }
+                retHolder = pr.mHolder;
+            } else {
+                ProviderRefCount prc = mProviderRefCountMap.get(jBinder);
+                if (prc != null) {
+                    if (DEBUG_PROVIDER) {
+                        Slog.v(TAG, "installProvider: lost the race, updating ref count");
+                    }
+                    // We need to transfer our new reference to the existing
+                    // ref count, releasing the old one...  but only if
+                    // release is needed (that is, it is not running in the
+                    // system process).
+                    if (!noReleaseNeeded) {
+                        incProviderRefLocked(prc, stable);
+                        try {
+                            ActivityManager.getService().removeContentProvider(
+                                    holder.connection, stable);
+                        } catch (RemoteException e) {
+                            //do nothing content provider object is dead any way
+                        }
+                    }
+                } else {
+                    ProviderClientRecord client = installProviderAuthoritiesLocked(
+                            provider, localProvider, holder);
+                    if (noReleaseNeeded) {
+                        prc = new ProviderRefCount(holder, client, 1000, 1000);
+                    } else {
+                        prc = stable
+                                ? new ProviderRefCount(holder, client, 1, 0)
+                                : new ProviderRefCount(holder, client, 0, 1);
+                    }
+                    mProviderRefCountMap.put(jBinder, prc);
+                }
+                retHolder = prc.holder;
+            }
+        }
+        return retHolder;
+    }
+```
+
+
+
+**frameworks/base/core/java/android/content/ContentProvider.java**
+
+```java
+ private void attachInfo(Context context, ProviderInfo info, boolean testing) {
+        mNoPerms = testing;
+
+        /*
+         * Only allow it to be set once, so after the content service gives
+         * this to us clients can't change it.
+         */
+        if (mContext == null) {
+            mContext = context;
+            if (context != null) {
+                mTransport.mAppOpsManager = (AppOpsManager) context.getSystemService(
+                        Context.APP_OPS_SERVICE);
+            }
+            mMyUid = Process.myUid();
+            if (info != null) {
+                setReadPermission(info.readPermission);
+                setWritePermission(info.writePermission);
+                setPathPermissions(info.pathPermissions);
+                mExported = info.exported;
+                mSingleUser = (info.flags & ProviderInfo.FLAG_SINGLE_USER) != 0;
+                setAuthorities(info.authority);
+            }
+            ContentProvider.this.onCreate();
+        }
     }
 ```
 

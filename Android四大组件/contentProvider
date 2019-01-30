@@ -1,0 +1,31 @@
+@startuml
+activate Activity
+Activity -> ContentResolver : query
+
+deactivate Activity
+activate ContentResolver
+ContentResolver -> ContentResolver : acquireUnstableProvider
+
+activate ApplicationContentResolver
+ContentResolver -> ApplicationContentResolver : acquireUnstableProvider
+
+deactivate ContentResolver
+ApplicationContentResolver -> ActivityThread : acquireProvider
+
+deactivate ApplicationContentResolver
+activate ActivityThread
+ActivityThread -> ActivityManagerService : getContentProvider (跨进程)
+deactivate ActivityThread
+activate ActivityManagerService
+ActivityManagerService -> ActivityManagerService : getContentProviderImpl
+
+
+ActivityManagerService -> ActivityThread : main
+deactivate ActivityManagerService
+deactivate ActivityManagerService
+activate ActivityThread
+ActivityThread -> ActivityThread : attach
+
+ActivityThread -> ActivityManagerService : attachApplication
+deactivate ActivityThread
+@enduml
