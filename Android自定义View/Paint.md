@@ -49,7 +49,7 @@ public Shader setShader(Shader shader) {}
 
 PorterDuff 使用方式：
 
-![](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/porterduff.jpg)
+![](images/porterduff.jpg)
 
 ```java
 Paint paint = new Paint();
@@ -68,11 +68,11 @@ canvas.drawBitmap(sourceImage, 0, 0, paint);
 
 第一类，Alpha 合成，其实就是 「PorterDuff」 这个词所指代的算法。 「PorterDuff」 并不是一个具有实际意义的词组，而是两个人的名字（准确讲是姓）。这两个人当年共同发表了一篇论文，描述了 12 种将两个图像共同绘制的操作（即算法）。而这篇论文所论述的操作，都是关于 Alpha 通道（也就是我们通俗理解的「透明度」）的计算的，后来人们就把这类计算称为**Alpha 合成** ( Alpha Compositing ) 。
 
-![](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/portduff.jpg)
+![](images/portduff.jpg)
 
 第二类，混合，也就是 Photoshop 等制图软件里都有的那些混合模式（`multiply` `darken` `lighten`之类的）。这一类操作的是颜色本身而不是 `Alpha` 通道，并不属于 `Alpha` 合成，所以和 Porter 与 Duff 这两个人也没什么关系，不过为了使用的方便，它们同样也被 Google 加进了 `PorterDuff.Mode`里。
 
-![](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/porterduff02.jpg)
+![](images/porterduff02.jpg)
 
 ## 绘制效果
 

@@ -8,11 +8,11 @@ Matrix 是一个矩阵，最根本的作用就是坐标转换。
 
 下面我们看一下四种变换都是由哪些参数控制的。
 
-![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/matrix01.png)
+![img](images/matrix01.png)
 
 
 
-![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/matrix02.png)
+![img](images/matrix02.png)
 
 ### 缩放(Scale)
 
@@ -30,7 +30,7 @@ $y = {k_2}{y_0}$
 
 图例
 
-![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/matrix03.jpg)
+![img](images/matrix03.jpg)
 
 ### 错切(Skew)
 
@@ -38,9 +38,11 @@ $y = {k_2}{y_0}$
 
 #### 水平错切
 
-$x={x_0}+ky_0$
+$$
+x={x_0}+ky_0 \\
 
-$y=y_0$
+y=y_0
+$$
 
 
 
@@ -100,7 +102,7 @@ $y=y_0$
 
 图例:
 
-![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/matrix_rotation.jpg)
+![img](images/matrix_rotation.jpg)
 
 ### 平移
 

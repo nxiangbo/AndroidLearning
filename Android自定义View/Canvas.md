@@ -10,7 +10,7 @@ drawing).
 
 ## 绘制基本图形
 
-Canvas 主要提供了在画布上绘制的功能。它有一系列的drawXXX()方法。可以绘制颜色，绘制基本图形，绘制文字等等。
+Canvas 主要提供了在画布上绘制的功能。它有一系列的drawXXX()方法。可以绘制颜色，绘制基本图形，绘制文字,绘制贝塞尔曲线等等。
 
 |              |                                                              |                                                              |
 | ------------ | ------------------------------------------------------------ | ------------------------------------------------------------ |
@@ -93,7 +93,7 @@ public final void scale (float sx, float sy, float px, float py) // 后两个参
 
 旋转提供了两种方法：
 
-```
+```java
 public void rotate (float degrees)
 
 public final void rotate (float degrees, float px, float py)
@@ -107,7 +107,7 @@ skew这里翻译为错切，错切是特殊类型的线性变换。
 
 错切只提供了一种方法：
 
-```
+```java
 public void skew (float sx, float sy)
 ```
 

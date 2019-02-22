@@ -63,7 +63,7 @@ public void lineTo (float x, float y)
 
 方法预览：
 
-```
+```java
 // moveTo
 public void moveTo (float x, float y)
 
@@ -84,7 +84,7 @@ public void setLastPoint (float dx, float dy)
 
 方法预览：
 
-```
+```java
 public void close ()
 ```
 
@@ -132,7 +132,7 @@ Direction的意思是 方向，趋势。 点进去看一下会发现Direction是
 
 方法预览：
 
-```
+```java
 // 第二类(Path)
 // path
 public void addPath (Path src)
@@ -190,7 +190,7 @@ addArc与arcTo区别
 
 方法预览：
 
-```
+```java
 public boolean isEmpty ()
 ```
 
@@ -210,7 +210,7 @@ public boolean isRect (RectF rect)
 
 方法预览：
 
-```
+```java
 public void set (Path src)
 ```
 
@@ -220,7 +220,7 @@ public void set (Path src)
 
 方法预览：
 
-```
+```java
 public void offset (float dx, float dy)
 public void offset (float dx, float dy, Path dst)
 ```
@@ -250,7 +250,7 @@ public void offset (float dx, float dy, Path dst)
 
 ### 奇偶规则
 
-![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/path-tianch01.jpg)
+![img](images/path-tianch01.jpg)
 
 P1: 从P1发出一条射线，发现图形与该射线相交边数为0，偶数，故P1点在图形外部。
 P2: 从P2发出一条射线，发现图形与该射线相交边数为1，奇数，故P2点在图形内部。
@@ -258,7 +258,7 @@ P3: 从P3发出一条射线，发现图形与该射线相交边数为2，偶数�
 
 ### 非零环绕数规则
 
-![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/path02.jpg)
+![img](images/path02.jpg)
 
 P1: 从P1点发出一条射线，沿射线防线移动，并没有与边相交点部分，环绕数为0，故P1在图形外边。
 P2: 从P2点发出一条射线，沿射线方向移动，与图形点左侧边相交，该边从左到右穿过穿过射线，环绕数－1，最终环绕数为－1，故P2在图形内部。
@@ -308,13 +308,13 @@ public boolean op(Path path, Op op) {
 
 Path布尔运算逻辑如下
 
-| 逻辑名称           | 类比 | 说明                                   | 示意图                                                       |
-| ------------------ | ---- | -------------------------------------- | ------------------------------------------------------------ |
-| DIFFERENCE         | 差集 | Path1中减去Path2后剩下的部分           | ![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/path_diff.jpg) |
-| REVERSE_DIFFERENCE | 差集 | Path2中减去Path1后剩下的部分           | ![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/path_reverse_diff.jpg) |
-| INTERSECT          | 交集 | Path1与Path2相交的部分                 | ![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/path_in.jpg) |
-| UNION              | 并集 | 包含全部Path1和Path2                   | ![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/path_union.jpg) |
-| XOR                | 异或 | 包含Path1与Path2但不包括两者相交的部分 | ![img](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/path_xor.jpg) |
+| 逻辑名称           | 类比 | 说明                                   | 示意图                               |
+| ------------------ | ---- | -------------------------------------- | ------------------------------------ |
+| DIFFERENCE         | 差集 | Path1中减去Path2后剩下的部分           | ![img](images/path_diff.jpg)         |
+| REVERSE_DIFFERENCE | 差集 | Path2中减去Path1后剩下的部分           | ![img](images/path_reverse_diff.jpg) |
+| INTERSECT          | 交集 | Path1与Path2相交的部分                 | ![img](images/path_in.jpg)           |
+| UNION              | 并集 | 包含全部Path1和Path2                   | ![img](images/path_union.jpg)        |
+| XOR                | 异或 | 包含Path1与Path2但不包括两者相交的部分 | ![img](images/path_xor.jpg)          |
 
 在Path中的布尔运算有两个方法
 
@@ -339,7 +339,7 @@ path3.op(path1, path2, Path.Op.DIFFERENCE)
 
 这个方法主要作用是计算Path所占用的空间以及所在位置,方法如下：
 
-```
+```java
 void computeBounds (RectF bounds, boolean exact)
 ```
 

@@ -1,0 +1,17 @@
+@startuml
+activate ActivityManagerService
+ActivityManagerService -> BroadcastQueue : scheduleBroadcastsLocked
+
+deactivate ActivityManagerService
+activate BroadcastQueue
+BroadcastQueue -> BroadcastHandler : sendMessage
+
+deactivate ContextWrapper
+activate ContextImpl
+BroadcastHandler -> BroadcastQueue : processNextBroadcast
+deactivate ContextImpl
+
+activate ActivityManagerService
+
+BroadcastQueue -> ActivityManagerService : broadcastIntentLocked
+@enduml

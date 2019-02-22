@@ -1,0 +1,14 @@
+@startuml
+activate Activity
+Activity -> ContextWrapper : registerReceiver
+
+deactivate Activity
+activate ContextWrapper
+ContextWrapper -> ContextImpl : registerReceiver
+
+deactivate ContextWrapper
+activate ContextImpl
+ContextImpl -> ContextImpl : registerReceiverInternal
+
+ContextImpl -> ActivityManagerService : registerReceiver
+@enduml

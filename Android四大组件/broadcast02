@@ -1,0 +1,17 @@
+@startuml
+activate Activity
+Activity -> ContextWrapper : sendBroadcast
+
+deactivate Activity
+activate ContextWrapper
+ContextWrapper -> ContextImpl : sendBroadcast
+
+deactivate ContextWrapper
+activate ContextImpl
+ContextImpl -> ActivityManagerService : broadcastIntent
+deactivate ContextImpl
+
+activate ActivityManagerService
+
+ActivityManagerService -> ActivityManagerService : broadcastIntentLocked
+@enduml

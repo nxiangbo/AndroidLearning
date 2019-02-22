@@ -91,7 +91,7 @@ float mapRadius (float radius)
 
 #### 3.mapRect
 
-```
+```java
 boolean mapRect (RectF rect)
 
 boolean mapRect (RectF dst, RectF src)
@@ -105,7 +105,7 @@ boolean mapRect (RectF dst, RectF src)
 
 测量向量。
 
-```
+```java
 void mapVectors (float[] vecs)
 
 void mapVectors (float[] dst, float[] src)
@@ -204,4 +204,23 @@ void setSinCos (float sinValue,     // 旋转角度的sin值
 | invert     | 求矩阵的逆矩阵                                       |
 | isAffine   | 判断当前矩阵是否为仿射矩阵，API21(5.0)才添加的方法。 |
 | isIdentity | 判断当前矩阵是否为单位矩阵。                         |
+
+
+
+>**仿射变换**，又称**仿射映射**，是指在[几何](https://zh.wikipedia.org/wiki/%E5%87%A0%E4%BD%95)中，一个[向量空间](https://zh.wikipedia.org/wiki/%E5%90%91%E9%87%8F%E7%A9%BA%E9%97%B4)进行一次[线性变换](https://zh.wikipedia.org/wiki/%E7%BA%BF%E6%80%A7%E5%8F%98%E6%8D%A2)并接上一个[平移](https://zh.wikipedia.org/wiki/%E5%B9%B3%E7%A7%BB)，变换为另一个向量空间。
+>
+>一个对向量$\vec{x}$平移$\vec{b}$，与旋转放大缩小$A​$的仿射映射为
+>$$
+>{\vec{y}=A\vec{x}+\vec{b}}
+>$$
+>
+>
+>上式在[齐次坐标](https://zh.wikipedia.org/wiki/%E9%BD%90%E6%AC%A1%E5%9D%90%E6%A0%87)上，等价于下面的式子
+>$$
+>\begin{bmatrix}{\vec{y} \\ 1} \end{bmatrix} = \begin{bmatrix}A & \vec{b} \\ 0,\cdots{0} & 1 \\ \end{bmatrix} \begin{bmatrix}{\vec{x} \\ 1} \end{bmatrix}
+>$$
+
+
+
+
 

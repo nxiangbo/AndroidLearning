@@ -17,7 +17,7 @@ getRight();     //获取子View右下角距父View左侧的距离
 
 
 
-![View 坐标系](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/view坐标.jpg)
+![View 坐标系](images/view坐标.jpg)
 
 ## MotionEvent中 get 和 getRaw 的区别
 
@@ -31,13 +31,13 @@ event.getRawY();
 
 
 
-![](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/view02.jpg)
+![](images/view02.jpg)
 
 ## View 绘制流程
 
 自定义View绘制流程示意图
 
-![](/Users/nxiangbo/Documents/AndroidLearning/Android自定义View/images/view03.jpg)
+![](images/view03.jpg)
 
 
 
@@ -63,11 +63,11 @@ public void SloopView(Context context, AttributeSet attrs, int defStyleAttr, int
 ```java
 @Override
 protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    int widthsize  MeasureSpec.getSize(widthMeasureSpec);      //取出宽度的确切数值
-    int widthmode  MeasureSpec.getMode(widthMeasureSpec);      //取出宽度的测量模式
+    int widthsize = MeasureSpec.getSize(widthMeasureSpec);      //取出宽度的确切数值
+    int widthmode = MeasureSpec.getMode(widthMeasureSpec);      //取出宽度的测量模式
     
-    int heightsize  MeasureSpec.getSize(heightMeasureSpec);    //取出高度的确切数值
-    int heightmode  MeasureSpec.getMode(heightMeasureSpec);    //取出高度的测量模式
+    int heightsize = MeasureSpec.getSize(heightMeasureSpec);    //取出高度的确切数值
+    int heightmode = MeasureSpec.getMode(heightMeasureSpec);    //取出高度的测量模式
 }
 ```
 
@@ -113,7 +113,7 @@ child.layout(l, t, r, b);
 
 onDraw是实际绘制的部分，使用的是Canvas绘图。
 
-```
+```java
 @Override
 protected void onDraw(Canvas canvas) {
     super.onDraw(canvas);
@@ -135,7 +135,7 @@ draw的流程：
  ## invalidate（）
 invalidate系列方法请求重绘View树（也就是draw方法），如果View大小没有发生变化就不会调用layout过程，并且只绘制那些“需要重绘的”View，也就是哪个View(View只绘制该View，ViewGroup绘制整个ViewGroup)请求invalidate系列方法，就绘制该View。
 
-      
+​      
 
 ## requestLayout（）
 requestLayout()方法会调用measure过程和layout过程，不会调用draw过程，也不会重新绘制任何View包括该调用者本身。
