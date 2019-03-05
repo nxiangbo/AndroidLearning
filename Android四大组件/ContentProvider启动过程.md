@@ -26,7 +26,7 @@
 
 
 
-![](E:\AndroidLearning\Android四大组件\images\contentProvider.png)
+![](images\contentProvider.png)
 
 **frameworks/base/core/java/android/content/ContentResolver.java**
 
@@ -703,7 +703,7 @@ private void attach(boolean system) {
 
 
 
-![](E:\AndroidLearning\Android四大组件\images\contentProvider02.png)
+![](images\contentProvider02.png)
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 

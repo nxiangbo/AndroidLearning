@@ -1,0 +1,37 @@
+@startuml
+interface Observer{
+	+ update()
+}
+
+class ObserverA{
+	+ update()
+}
+
+class ObserverB{
+	+ update()
+}
+
+Observer <|-- ObserverA
+Observer <|-- ObserverB
+
+
+
+interface Observable{
+	+ register(Observer observer)
+	+ unregister(Observer observer)
+	+ notifyObserver()
+
+}
+
+class ObservableA {
+	- observerList
+	+ register(Observer observer)
+	+ unregister(Observer observer)
+	+ notifyObserver()
+}
+
+Observable <|-- ObservableA
+
+Observer -o Observable
+
+@enduml

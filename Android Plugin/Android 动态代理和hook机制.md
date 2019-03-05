@@ -8,7 +8,7 @@
 
 而动态代理是可以在代码运行时自动创建相应的代理类。
 
-Java中提供了Proxy和InvocationHandler两个API。Proxy可以通过调用newProxyInstance方法获取一个代理类实例。InvocationHandler是一个接口。每个实现InvocationHandler接口的类会持有对应的被代理类实例。
+Java中提供了Proxy和`InvocationHandler`两个API。Proxy可以通过调用newProxyInstance方法获取一个代理类实例。InvocationHandler是一个接口。每个实现InvocationHandler接口的类会持有对应的被代理类实例。
 
 
 

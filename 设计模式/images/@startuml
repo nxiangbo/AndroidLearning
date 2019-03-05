@@ -1,0 +1,32 @@
+@startuml
+interface Observer{
+	+ update(String msg)
+}
+
+class User{
+	- name
+	+ update(String msg)
+}
+
+Observer <|-- User
+
+
+interface Observable{
+	+ register(Observer observer)
+	+ unregister(Observer observer)
+	+ notifyObserver(String msg)
+
+}
+
+class WechatObservable {
+	- observerList
+	+ register(Observer observer)
+	+ unregister(Observer observer)
+	+ notifyObserver(String msg)
+}
+
+Observable <|-- WechatObservable
+
+Observer -o Observable
+
+@enduml

@@ -6,7 +6,7 @@ JPG的压缩方案被分成几个步骤，下图很好的把它们展示出来�
 
 
 
-![img](E:\AndroidLearning\图片\images\jpg工作原理图.png)
+![img](images\jpg工作原理图.png)
 
 
 ### 色彩空间转换

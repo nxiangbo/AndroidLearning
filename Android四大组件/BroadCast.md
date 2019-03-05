@@ -18,7 +18,7 @@
 
 ## Broadcast接收者的注册过程
 
-![](E:\AndroidLearning\Android四大组件\images\broadcast01.png)
+![](images\broadcast01.png)
 
 **frameworks/base/core/java/android/content/ContextWrapper.java**
 

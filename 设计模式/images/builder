@@ -1,0 +1,40 @@
+@startuml
+class AbstractDialogBuilder{
+	- dialog
+	+ getDialog()
+	+ createDialog()
+	+ setTitle()
+	+ setContent()
+	+ setNegativeButton()
+	+ setPositiveButton()
+}
+
+class DialogBuilder{
+	+ setTitle()
+	+ setContent()
+	+ setNegativeButton()
+	+ setPositiveButton()
+}
+
+AbstractDialogBuilder <|-- DialogBuilder
+
+
+class Dialog{
+	- title
+	- content 
+	- button1
+	- button2
+	+ setTitle()
+	+ setContent()
+	+ setNegativeButton()
+	+ setPositiveButton()
+}
+
+Dialog --left--o AbstractDialogBuilder
+
+
+
+
+
+
+@enduml

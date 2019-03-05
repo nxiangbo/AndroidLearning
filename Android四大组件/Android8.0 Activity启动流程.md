@@ -9,7 +9,7 @@ Activity的启动分为根Activity的启动和普通Activity的启动。根Activ
 ## 根Activity启动过程中涉及的进程
 
 在应用程序进程没有创建的情况下，根Activity启动过程中会涉及到4个进程，分别是Zygote进程、Launcher进程、AMS所在进程（SyetemServer进程）、应用程序进程。它们之间的关系如下图所示。
-![](E:\AndroidLearning\Android源码分析\images\1417629-1e3a8402380f8a17.png)
+![](images\1417629-1e3a8402380f8a17.png)
 
 
 
@@ -466,7 +466,7 @@ Controller for interpreting how and then launching activities.This class collect
 
 
 
-![Activity 启动过程-02](\Activity 启动过程-02.png)
+![Activity 启动过程-02](images/Activity 启动过程-02.png)
 
 
 
