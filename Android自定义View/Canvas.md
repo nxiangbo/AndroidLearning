@@ -127,7 +127,7 @@ public void skew (float sx, float sy)
 
 类似于Photoshop，Canvas也有图层的概念。当绘制比较复杂的view时，可能需要绘制多个图层。而有一个栈是专门用于存放图层的，当调用save方法时，将当前图层状态压入到栈中。当调用restore方法时，则将栈中的栈顶图层出栈。通常情况下，save方法和restore方法都是成对使用。
 
-
+> 注意：restore和save必须成对出现，如果restore出现次数比save多，则会报错。错误信息为`java.lang.IllegalStateException: Underflow in restore - more restores than saves`
 
 save有两个方法
 
