@@ -2,6 +2,10 @@
 
 ## 线程池的基本使用
 
+
+
+### 创建线程池
+
 ```java
 new ThreadPoolExecutor(int corePoolSize,
                               int maximumPoolSize,
@@ -22,7 +26,45 @@ new ThreadPoolExecutor(int corePoolSize,
 
 - workQueue：用于保存等待执行的任务的阻塞队列。 可以选择以下几个阻塞队列。
 
+- handler: 当线程池的任务缓存队列已满并且线程池中的线程数目达到maximumPoolSize，如果还有任务到来就会采取任务拒绝策略，通常有以下四种策略：
+
+  1. `ThreadPoolExecutor.AbortPolicy`:丢弃任务并抛出RejectedExecutionException异常。
+  2. `ThreadPoolExecutor.DiscardPolicy`：也是丢弃任务，但是不抛出异常。
+  3. `ThreadPoolExecutor.DiscardOldestPolicy`：丢弃队列最前面的任务，然后重新尝试执行任务（重复此过程）
+  4. `ThreadPoolExecutor.CallerRunsPolicy`：由调用线程处理该任务
+
+
+
+为了使用方便，Executors工具类提供了几个创建线程池的方法。
+
+- `newCachedThreadPool`创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。
+- `newFixedThreadPool` 创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。
+- `newScheduledThreadPool `创建一个定长线程池，支持定时及周期性任务执行。
+- `newSingleThreadExecutor` 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行。
+
+
+
+```java
+ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
+```
+
+
+
+> ![](/Users/nxiangbo/Documents/AndroidLearning/Java并发/images/threadpool-note01.png)
+
+
+
 
 
 ## 线程池实现原理
+
+
+
+### 类图结构
+
+![](images/threadpool.png)
+
+
+
+
 

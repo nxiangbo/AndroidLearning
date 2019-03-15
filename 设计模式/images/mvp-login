@@ -1,0 +1,35 @@
+@startuml
+interface ILoginPresenter{
+	+ doLogin(String name, String password)
+	+ setProgressBarVisibility(int visibility)
+	+ onDestroy()
+}
+
+class LoginPresenter{
+	- loginView
+	+ doLogin(String name, String password)
+	+ setProgressBarVisibility(int visibility)
+	+ onDestroy()
+}
+
+ILoginPresenter <|-- LoginPresenter
+
+
+interface ILoginView{
+	+ onLoginResult(boolean result, int code)
+	+ onSetProgressBarVisibility(int visibility)
+}
+
+class LoginActivity{
+	- mLoginPresenter
+	+ onLoginResult(boolean result, int code)
+	+ onSetProgressBarVisibility(int visibility)
+}
+
+ILoginView <|-- LoginActivity
+
+ILoginView o-- LoginPresenter
+
+ILoginPresenter o-- LoginActivity
+
+@enduml

@@ -1,0 +1,67 @@
+@startuml
+
+interface RejectedExecutionHandler{
+	+ rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+}
+
+class AbortPolicy{
+	+ rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+}
+RejectedExecutionHandler <|-- AbortPolicy
+
+RejectedExecutionHandler -left--o ThreadPoolExecutor
+
+interface Executor{
+	+ execute(Runnable command)
+}
+
+interface ExecutorService{
+	+ shutdown()
+	+ shutdownNow()
+	+ submit(Runnable task)
+	+ isShutdown()
+	+ isTerminated()
+	+ invokeAll(Collection<? extends Callable<T>> tasks)
+	+ invokeAny()
+}
+
+Executor <|-- ExecutorService
+
+
+class AbstractExecutorService{
+	
+}
+
+ExecutorService <|-- AbstractExecutorService
+
+
+class ThreadPoolExecutor {
+	- workQueue
+	- workers
+	- handler
+	- threadFactory
+	- corePoolSize
+	- maximumPoolSize
+	- keepAliveTime
+
+	
+}
+AbstractExecutorService <|--down-- ThreadPoolExecutor
+
+
+class AbstractQueuedSynchronizer {
+	+ tryAcquire(int arg)
+	+ tryRelease(int arg)
+}
+class Worker{
+	
+}
+
+AbstractQueuedSynchronizer <|-- Worker
+
+ThreadPoolExecutor o--right-- Worker
+
+
+
+
+@enduml
