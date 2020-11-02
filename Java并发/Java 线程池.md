@@ -50,7 +50,7 @@ ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 
 
 
-> ![](/Users/nxiangbo/Documents/AndroidLearning/Java并发/images/threadpool-note01.png)
+> ![](images/threadpool-note01.png)
 
 
 
@@ -65,6 +65,73 @@ ExecutorService cachedThreadPool = Executors.newCachedThreadPool();
 ![](images/threadpool.png)
 
 
+
+```mermaid
+classDiagram
+  class RejectedExecutionHandler{
+    + rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+  }
+
+  class AbortPolicy{
+    + rejectedExecution(Runnable r, ThreadPoolExecutor executor)
+  }
+  RejectedExecutionHandler <|-- AbortPolicy
+
+  RejectedExecutionHandler <|-- ThreadPoolExecutor
+	
+  class Executor{
+    + execute(Runnable command)
+  }
+  <<Interface>> Executor
+
+  class ExecutorService{
+
+   + shutdown()
+     + shutdownNow()
+     + submit(Runnable task)
+     + isShutdown()
+     + isTerminated()
+     + invokeAll(Collection<? extends Callable<T>> tasks)
+     + invokeAny()
+       }
+
+  Executor <|-- ExecutorService
+
+
+  class AbstractExecutorService{
+
+  }
+
+  ExecutorService <|-- AbstractExecutorService
+
+
+  class ThreadPoolExecutor {
+    - workQueue
+    - workers
+    - handler
+    - threadFactory
+    - corePoolSize
+    - maximumPoolSize
+    - keepAliveTime
+
+
+  }
+  AbstractExecutorService <|-- ThreadPoolExecutor
+
+
+  class AbstractQueuedSynchronizer {
+    + tryAcquire(int arg)
+    + tryRelease(int arg)
+  }
+  class Worker{
+
+  }
+
+  
+
+  ThreadPoolExecutor o-- Worker
+  AbstractQueuedSynchronizer <|-- Worker
+```
 
 
 

@@ -254,7 +254,7 @@
 
 ## 发送广播
 
-![](E:\AndroidLearning\Android四大组件\images\broadcast02.png)
+![](images\broadcast02.png)
 
 
 

@@ -26,7 +26,40 @@
 
 
 
-![](images\contentProvider.png)
+```mermaid
+sequenceDiagram
+  activate Activity
+  Activity -> ContentResolver : query
+
+  deactivate Activity
+  activate ContentResolver
+  ContentResolver -> ContentResolver : acquireUnstableProvider
+
+  activate ApplicationContentResolver
+  ContentResolver -> ApplicationContentResolver : acquireUnstableProvider
+
+  deactivate ContentResolver
+  ApplicationContentResolver -> ActivityThread : acquireProvider
+
+  deactivate ApplicationContentResolver
+  activate ActivityThread
+  ActivityThread -> ActivityManagerService : getContentProvider (跨进程)
+  deactivate ActivityThread
+  activate ActivityManagerService
+  ActivityManagerService -> ActivityManagerService : getContentProviderImpl
+
+
+  ActivityManagerService -> ActivityThread : main
+  deactivate ActivityManagerService
+ 
+  activate ActivityThread
+  ActivityThread -> ActivityThread : attach
+
+  ActivityThread -> ActivityManagerService : attachApplication
+  deactivate ActivityThread
+```
+
+
 
 **frameworks/base/core/java/android/content/ContentResolver.java**
 
@@ -704,6 +737,40 @@ private void attach(boolean system) {
 
 
 ![](images\contentProvider02.png)
+
+
+
+```mermaid
+sequenceDiagram
+ activate ActivityManagerService
+  ActivityManagerService ->> ActivityManagerService : attachApplicationLocked
+
+	
+  ActivityManagerService ->> ApplicationThread : bindApplication
+  deactivate ActivityManagerService
+  activate ApplicationThread
+  ApplicationThread ->> ActivityThread : sendMessage
+  deactivate ApplicationThread
+
+  activate ActivityThread
+  ActivityThread ->> H : handleMessage
+
+  activate H
+  H ->> ActivityThread : handleBindApplication
+  deactivate H
+
+  ActivityThread ->> ActivityThread : installContentProviders
+
+  ActivityThread ->> ActivityThread : installProvider
+
+
+  ActivityThread ->> ContentProvider : attachInfo
+  deactivate ActivityThread
+  activate ContentProvider
+  ContentProvider ->> ContentProvider : onCreate
+```
+
+
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 

@@ -25,6 +25,12 @@ Activity的启动分为根Activity的启动和普通Activity的启动。根Activ
 
 ![Activity启动过程-01](images/Activity启动过程-01.png)
 
+
+
+
+
+
+
 当我们启动应用程序时，Launcher组件会调用它的startActivitySafely函数。
 
 **packages/apps/Launcher3/src/com/android/launcher3/Launcher.java** 
@@ -792,6 +798,22 @@ public void callActivityOnCreate(Activity activity, Bundle icicle,
 activity.performCreate 会调用Activity的onCreate方法，到此，Activity就启动了。
 
 
+
+
+
+## performLaunchActivity 做了哪些事情
+
+
+
+创建ContextImpl对象
+
+创建Activity对象
+
+将ContextImpl对象绑定到Activity中
+
+创建PhoneWindow对象
+
+调用Activity的onCreate方法
 
 
 

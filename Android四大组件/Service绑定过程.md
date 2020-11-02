@@ -2,7 +2,23 @@
 
 
 
-![](images\bindService01.png)
+```mermaid
+sequenceDiagram
+  activate Activity
+  Activity ->> ContextWrapper : bindService
+
+  deactivate Activity
+  activate ContextWrapper
+  ContextWrapper ->> ContextImpl : bindService
+
+  deactivate ContextWrapper
+  activate ContextImpl
+  ContextImpl ->> ContextImpl : bindServiceCommon
+
+  ContextImpl ->> ActivityManagerService : bindService
+```
+
+
 
 **frameworks/base/core/java/android/content/ContextWrapper.java**
 
@@ -71,9 +87,37 @@
 
 
 
+```mermaid
+sequenceDiagram
+  activate ActivityManagerService
+  ActivityManagerService ->> ActiveServices : bindServiceLocked
+
+  deactivate ActivityManagerService
+  activate ActiveServices
+  ActiveServices ->> ActiveServices : requestServiceBindingLocked
+  ActiveServices ->> ApplicationThread : scheduleBindService
+
+  deactivate ActiveServices
+  activate ApplicationThread
+  ApplicationThread ->> ActivityThread : sendMessage
+
+  deactivate ApplicationThread
+  activate ActivityThread
+  ActivityThread ->> H : handleMessage
+
+  activate H
+  H ->> ActivityThread : handleBindService
+  deactivate H
+
+  activate Service
+  ActivityThread ->> Service : onBind
+  deactivate ActivityThread
+  deactivate Service
+
+  ActivityThread ->> ActivityManagerService : publishService
+```
 
 
-![](images\bindService02.png)
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 
@@ -498,7 +542,35 @@ private void handleBindService(BindServiceData data) {
 
 
 
-![](images\bindService03.png)
+
+
+```mermaid
+sequenceDiagram
+  activate ActivityManagerService
+  ActivityManagerService ->> ActiveServices : publishServiceLocked
+
+  deactivate ActivityManagerService
+  activate ActiveServices
+  ActiveServices ->> InnerConnection : connected
+
+  deactivate ActiveServices
+  activate InnerConnection
+  InnerConnection ->> ServiceDispatcher : connected
+
+  deactivate InnerConnection
+  activate ServiceDispatcher
+  ServiceDispatcher ->> RunConnection : run
+
+  activate RunConnection
+  RunConnection ->> ServiceDispatcher : doConnected
+  deactivate RunConnection
+  ServiceDispatcher ->> ServiceConnection : onServiceConnected
+  deactivate ServiceDispatcher
+```
+
+
+
+
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 

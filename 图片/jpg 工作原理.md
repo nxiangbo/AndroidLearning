@@ -16,7 +16,7 @@ JPG的压缩方案被分成几个步骤，下图很好的把它们展示出来�
 
 将JPG从RGB颜色模型转换成[Y,Cb,Cr](https://link.jianshu.com/?t=https://en.wikipedia.org/wiki/YCbCr)颜色模型，包括亮度(Y)、色度蓝(CB)和色度红(CR)。
 
-![img](E:\AndroidLearning\图片\images\webp)
+![img](images/webp)
 
 ### 缩减取样
 

@@ -48,7 +48,7 @@ task copyPdfReportsForArchiving(type: Copy) {
 }
 ```
 
-![copy-with-flat-filter-example](E:\笔记\images\copy-with-flat-filter-example.png)
+![copy-with-flat-filter-example](images\copy-with-flat-filter-example.png)
 
 
 
