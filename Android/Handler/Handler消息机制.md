@@ -1,5 +1,15 @@
 # handler机制
 
+
+
+## 消息类型
+
+Handler的消息类型 同步消息 异步消息 同步屏障（target 为null）
+同步屏障可以保证异步消息优先执行，不管异步消息在消息队列什么位置。
+
+同步屏障使用例子 draw input animation
+设置异步消息 Message.setAsynchronous(true)
+
 ## 处理消息
 
 Looper.prepare 创建Looper和消息队列
