@@ -2,7 +2,7 @@
 
 ## Service生命周期
 
-![img](images\service_lifecycle.png)
+![img](..\images\service_lifecycle.png)
 
 
 

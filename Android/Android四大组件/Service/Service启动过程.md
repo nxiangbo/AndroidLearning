@@ -57,7 +57,7 @@ mBase是Context类型的，它的具体实现类是ContextImp。
 
 主要是执行ActivityManager.getService().startService方法，这个方法最终会调用ActivityManagerService的startService方法。
 
-![](images\startService02.png)
+![](..\images\startService02.png)
 
 **frameworks/base/services/core/java/com/android/server/am/ActivityManagerService.java**
 
