@@ -16,7 +16,9 @@ jvm垃圾回收机制使用可达性分析的算法。对象不可用，但仍�
 
 以Handler为例，在Activity中创建一个Handler，并创建一个延时任务。当在任务处理完成前，Activity被销毁时，gc过程发现Handler引用着Activity对象，不会回收。因此该Activity不能被正确回收导致内存泄漏。
 
-上述内存泄漏的引用关系
+#### 内存泄漏原因
+
+Handler内存泄漏的引用关系
 
 - 非静态内部类引用着外部类（Handler -> Activity）
 - 入消息队列时，消息msg.target=Handler，Message持有Handler（Message -> Handler）
@@ -24,21 +26,24 @@ jvm垃圾回收机制使用可达性分析的算法。对象不可用，但仍�
 
 ```java
 MessageQueue -> Message -> Handler -> Activity
-
 ```
 
 何时Message断开Handler引用呢？
 当从消息队列中取出Message后，执行消息任务时，会调msg.recycleUnchecked将target置为null。
 
-- 修复方式
+#### 解决方案
 
 弱引用 + 静态内部类
 
 
 ### context内存泄漏
-单例对象持有Activity的context。由于单例的生命周期与应用程序进程一致，而一般Activity生命周期要短。当Activity被destroy后，单例仍持有Activity的context，不会被gc回收掉，导致内存泄漏。
+单例对象持有Activity的context。
 
-- 修复方式
+#### 内存泄漏原因
+
+由于单例的生命周期与应用程序进程一致，而一般Activity生命周期要短。当Activity被destroy后，单例仍持有Activity的context，不会被gc回收掉，导致内存泄漏。
+
+#### 解决方案
 将Activity的context替换为application的context
 
 
@@ -59,11 +64,10 @@ LeakCanary可以自动检测Activity/Fragment对象内存泄漏，并生成堆�
 2. 将Activity包装为WeakReference
 3. 主动调用gc，检测引用队列中是否有该Activity，如果不在引用队列中，则内存泄漏。
 
-
-
-
+*ReferenceQueue：当对象被回收后，其相应的包装类（Reference对象）会被放入到引用队列中*
 
 ### Android Profile
+
 
 ### MAT
 
