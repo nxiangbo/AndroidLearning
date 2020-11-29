@@ -14,7 +14,7 @@
 
 
 
-![apply](E:\笔记\images\apply.png)
+![apply](images\apply.png)
 
 
 
